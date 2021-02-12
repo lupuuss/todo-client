@@ -12,7 +12,10 @@ repositories {
     google()
     jcenter()
     mavenCentral()
-    maven { url = uri("https://dl.bintray.com/kotlin/kotlin-js-wrappers") }
+    maven {
+        url = uri("https://dl.bintray.com/kotlin/kotlin-js-wrappers")
+        url = uri("https://mymavenrepo.com/repo/2BJkI2Y3564lDjV9fO9A/")
+    }
 }
 
 kotlin {
@@ -35,7 +38,11 @@ kotlin {
         }
     }
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                implementation("com.github.lupuuss.todo:core:1.0-SNAPSHOT")
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
