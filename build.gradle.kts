@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 
 plugins {
     kotlin("multiplatform") version "1.4.30"
+    kotlin("plugin.serialization") version "1.4.30"
     id("com.android.application")
 }
 
@@ -17,6 +18,9 @@ repositories {
         url = uri("https://mymavenrepo.com/repo/2BJkI2Y3564lDjV9fO9A/")
     }
 }
+
+val vKtor = "1.5.1"
+val vKodein = "7.3.0"
 
 kotlin {
     android()
@@ -40,7 +44,12 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("com.github.lupuuss.todo:core:1.0-SNAPSHOT")
+                implementation("com.github.lupuuss.todo:core:1.0.2")
+
+                implementation("org.kodein.di:kodein-di:$vKodein")
+
+                implementation("io.ktor:ktor-client-core:$vKtor")
+                implementation("io.ktor:ktor-client-serialization:$vKtor")
             }
         }
         val commonTest by getting {
@@ -62,6 +71,9 @@ kotlin {
         }
         val jsMain by getting {
             dependencies {
+
+                implementation("com.github.lupuuss.todo:core-js:1.0.2")
+
                 implementation("org.jetbrains:kotlin-react:16.13.1-pre.113-kotlin-1.4.0")
                 implementation("org.jetbrains:kotlin-react-dom:16.13.1-pre.113-kotlin-1.4.0")
                 implementation("org.jetbrains:kotlin-styled:1.0.0-pre.113-kotlin-1.4.0")

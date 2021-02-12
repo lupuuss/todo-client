@@ -1,3 +1,4 @@
+import com.github.lupuuss.todo.client.core.TodoKodein
 import react.dom.render
 import kotlinx.browser.document
 import kotlinx.browser.window

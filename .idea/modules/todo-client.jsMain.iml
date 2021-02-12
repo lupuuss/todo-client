@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.system.module.type="sourceSet" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../build/externals/todo-client/src" />
+    <content url="file://$MODULE_DIR$/../../src/jsMain">
+      <sourceFolder url="file://$MODULE_DIR$/../../src/jsMain/kotlin" type="kotlin-source" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/jsMain/resources" type="kotlin-resource" />
+    </content>
+    <orderEntry type="jdk" jdkName="Kotlin SDK" jdkType="KotlinSDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="todo-client.commonMain" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:kotlin-styled:1.0.0-pre.113-kotlin-1.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:kotlin-react-dom:16.13.1-pre.113-kotlin-1.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:kotlin-react-router-dom:5.1.2-pre.113-kotlin-1.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:kotlin-react:16.13.1-pre.113-kotlin-1.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-js:1.4.30" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.4.30" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:kotlin-extensions:1.0.1-pre.113-kotlin-1.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kotlinx-html-js:0.7.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:kotlin-css-js:1.0.0-pre.113-kotlin-1.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.9" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:atomicfu-js:0.14.4" level="project" />
+  </component>
+</module>
