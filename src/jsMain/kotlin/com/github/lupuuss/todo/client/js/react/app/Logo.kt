@@ -1,7 +1,7 @@
-package react.app
+package com.github.lupuuss.todo.client.js.react.app
 
+import com.github.lupuuss.todo.client.js.react.Colors
 import kotlinx.css.*
-import react.Colors
 import react.RBuilder
 import react.RComponent
 import react.RProps

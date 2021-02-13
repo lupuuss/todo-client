@@ -1,7 +1,6 @@
-package react
+package com.github.lupuuss.todo.client.js.react
 
 import kotlinx.css.Color
-import kotlinx.css.rgb
 
 object Colors {
     val primary = Color("#66D7D1")

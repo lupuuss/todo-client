@@ -1,14 +1,14 @@
-package react.app
+package com.github.lupuuss.todo.client.js.react.app
 
 import com.github.lupuuss.todo.client.core.TodoKodein
 import com.github.lupuuss.todo.client.core.repository.TaskRepository
+import com.github.lupuuss.todo.client.js.react.Colors
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.css.*
 import org.kodein.di.direct
 import org.kodein.di.instance
-import react.Colors
 import react.RBuilder
 import react.RComponent
 import styled.css

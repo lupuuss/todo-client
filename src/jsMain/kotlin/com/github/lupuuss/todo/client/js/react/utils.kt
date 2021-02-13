@@ -1,4 +1,4 @@
-package react
+package com.github.lupuuss.todo.client.js.react
 
 import styled.StyleSheet
 
