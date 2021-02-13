@@ -50,6 +50,7 @@ kotlin {
 
                 implementation("io.ktor:ktor-client-core:$vKtor")
                 implementation("io.ktor:ktor-client-serialization:$vKtor")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
             }
         }
         val commonTest by getting {

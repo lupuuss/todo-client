@@ -21,7 +21,11 @@ class TodoApp : RComponent<dynamic, dynamic>() {
 
         GlobalScope.launch {
             async {
-                println(repo.getTodoTasks(0, 10))
+                try {
+                    println(repo.getTodoTasks(0, 10))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }
