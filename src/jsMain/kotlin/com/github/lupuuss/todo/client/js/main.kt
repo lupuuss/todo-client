@@ -1,8 +1,10 @@
-import com.github.lupuuss.todo.client.core.TodoKodein
+package com.github.lupuuss.todo.client.js
+
+import com.github.lupuuss.todo.client.js.react.app.TodoApp
 import react.dom.render
 import kotlinx.browser.document
 import kotlinx.browser.window
-import react.app.TodoApp
+
 
 fun main() {
     window.onload = {
