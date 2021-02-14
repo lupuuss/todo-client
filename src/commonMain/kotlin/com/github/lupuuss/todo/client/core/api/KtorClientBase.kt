@@ -2,6 +2,7 @@ package com.github.lupuuss.todo.client.core.api
 
 import io.ktor.client.*
 import io.ktor.client.request.*
+import io.ktor.http.*
 
 open class KtorClientBase(protected val baseUrl: String, protected val client: HttpClient) {
 
@@ -27,9 +28,19 @@ open class KtorClientBase(protected val baseUrl: String, protected val client: H
         return strBuilder.toString()
     }
 
+    protected fun getUrl(relativePath: String)  = baseUrl + relativePath
+
     protected suspend inline fun <reified T> get(path: String, parameters: Map<String, Any?>? = null): T {
 
-        val url = baseUrl + path
+        val url = getUrl(path)
         return client.get(url.applyParameters(parameters))
+    }
+
+    protected suspend inline fun <reified T> postJson(path: String, body: Any): T {
+        return client.post(getUrl(path)) {
+
+            contentType(ContentType.parse("application/json"))
+            this.body = body
+        }
     }
 }
