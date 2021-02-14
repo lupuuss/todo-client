@@ -1,9 +1,8 @@
 package com.github.lupuuss.todo.client.core
 
-import com.github.lupuuss.todo.client.core.api.KtorTaskApi
-import com.github.lupuuss.todo.client.core.api.TasksApi
+import com.github.lupuuss.todo.client.core.api.task.KtorTaskApi
+import com.github.lupuuss.todo.client.core.api.task.TasksApi
 import com.github.lupuuss.todo.client.core.auth.JwtAuth
-import com.github.lupuuss.todo.client.core.auth.TokenHolder
 import com.github.lupuuss.todo.client.core.repository.TaskRepository
 import io.ktor.client.*
 import io.ktor.client.features.json.*
