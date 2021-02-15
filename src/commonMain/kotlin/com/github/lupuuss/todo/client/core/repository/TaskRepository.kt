@@ -12,7 +12,7 @@ class TaskRepository(private val taskApi: TasksApi) {
             taskApi.getTasks(pageNumber, pageSize, Task.Status.NOT_STARTED)
         } catch (eAuth: AuthRequiredException) {
             throw eAuth
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             throw ResourceNotReachedException(e)
         }
     }

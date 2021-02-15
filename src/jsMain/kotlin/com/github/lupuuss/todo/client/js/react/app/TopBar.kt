@@ -4,6 +4,7 @@ import com.github.lupuuss.todo.client.js.react.Colors
 import kotlinx.css.*
 import react.RBuilder
 import react.RComponent
+import react.ReactElement
 import styled.css
 import styled.styledDiv
 
@@ -15,13 +16,15 @@ class TopBar : RComponent<dynamic, dynamic>() {
 
             css {
                 backgroundColor = Colors.primary
-                width = 100.pct
-                display = Display.inlineBlock
+                display = Display.flex
+                flexDirection = FlexDirection.row
             }
 
-            child(Logo::class) {
-                attrs { value = "TO-DO" }
+            logo {
+                title = "TO-DO"
             }
         }
     }
 }
+
+fun RBuilder.topBar(): ReactElement = child(TopBar::class) {}

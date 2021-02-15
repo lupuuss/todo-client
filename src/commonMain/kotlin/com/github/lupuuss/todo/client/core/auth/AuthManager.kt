@@ -4,7 +4,7 @@ import com.github.lupuuss.todo.api.core.user.Credentials
 import com.github.lupuuss.todo.api.core.user.User
 import com.github.lupuuss.todo.client.core.api.auth.AuthApi
 
-class AuthFailedException(cause: Exception) : Exception(cause = cause)
+class AuthFailedException(cause: Throwable) : Exception(cause = cause)
 
 class AuthManager(
     private val authApi: AuthApi,
@@ -17,7 +17,7 @@ class AuthManager(
             val token = authApi.login(Credentials(login, password))
 
             tokenHolder.setToken(token)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             throw AuthFailedException(e)
         }
     }

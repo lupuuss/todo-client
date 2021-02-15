@@ -9,7 +9,7 @@ import styled.css
 import styled.styledDiv
 
 external interface LogoProps : RProps {
-    var value: String
+    var title: String
 }
 
 class Logo(props: LogoProps) : RComponent<LogoProps, dynamic>(props) {
@@ -17,12 +17,13 @@ class Logo(props: LogoProps) : RComponent<LogoProps, dynamic>(props) {
     override fun RBuilder.render() {
         styledDiv {
             css {
-                fontSize = 2.rem
-                color = Colors.contras
-                padding(1.rem)
-                float = Float.left
+                fontSize = 6.rem
+                color = Colors.contrast
+                padding(2.rem)
             }
-            +props.value
+            +props.title
         }
     }
 }
+
+fun RBuilder.logo(handler: LogoProps.() -> Unit) = child(Logo::class) { attrs(handler) }
