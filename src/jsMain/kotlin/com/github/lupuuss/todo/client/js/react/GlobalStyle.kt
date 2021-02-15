@@ -37,7 +37,6 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
         }
 
         input {
-            display = Display.block
             borderRadius = 5.px
             borderColor = Color.transparent
             fontSize = 2.rem

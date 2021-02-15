@@ -2,9 +2,11 @@ package com.github.lupuuss.todo.client.js.react.login
 
 import com.github.lupuuss.todo.client.core.TodoKodein
 import com.github.lupuuss.todo.client.core.auth.AuthManager
+import com.github.lupuuss.todo.client.js.react.common.iconInput
 import kotlinx.coroutines.*
 import kotlinx.html.ButtonType
 import kotlinx.html.InputType
+import kotlinx.html.classes
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onSubmitFunction
 import org.kodein.di.instance
@@ -12,6 +14,7 @@ import org.w3c.dom.events.Event
 import react.*
 import react.dom.button
 import react.dom.div
+import react.dom.i
 import styled.*
 
 external interface LoginProps : RProps {
@@ -103,23 +106,21 @@ class Login : RComponent<LoginProps, LoginState>(), CoroutineScope by MainScope(
                     +LoginStyles.form
                 }
 
-                styledInput(InputType.text) {
-
-                    css { +LoginStyles.login }
-
-                    attrs {
-                        value = state.login
-                        onChangeFunction = this@Login::onLoginChange
+                iconInput {
+                    iconSettings = setOf("fa", "fa-camera-retro", "fa-5x")
+                    attrs = {
+                        it.type = InputType.text
+                        it.value = state.login
+                        it.onChangeFunction = this@Login::onLoginChange
                     }
                 }
 
-                styledInput(InputType.password) {
-
-                    css { +LoginStyles.password }
-
-                    attrs {
-                        value = state.password
-                        onChangeFunction = this@Login::onPasswordChange
+                iconInput {
+                    iconSettings = setOf("fa", "fa-camera-retro", "fa-5x")
+                    attrs = {
+                        it.type = InputType.password
+                        it.value = state.password
+                        it.onChangeFunction = this@Login::onPasswordChange
                     }
                 }
 

@@ -12,7 +12,7 @@ external interface LogoProps : RProps {
     var title: String
 }
 
-class Logo(props: LogoProps) : RComponent<LogoProps, dynamic>(props) {
+class Logo : RComponent<LogoProps, dynamic>() {
 
     override fun RBuilder.render() {
         styledDiv {

@@ -5,17 +5,6 @@ import kotlinx.css.*
 
 object LoginStyles : NamedStylesheet() {
 
-    val login by css {
-
-        before {
-
-        }
-    }
-
-    val password by css {
-
-    }
-
     val form by css {
 
         display = Display.flex
