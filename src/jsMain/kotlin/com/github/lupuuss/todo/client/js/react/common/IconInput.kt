@@ -30,36 +30,19 @@ class IconInput : RComponent<IconInputProps, dynamic>() {
     override fun RBuilder.render() {
         styledDiv {
 
-            css {
-                position = Position.relative
-            }
+            css { +IconInputStyles.container }
 
             styledDiv {
 
-               css {
-                   color = props.iconColor
-                   width = props.iconSize
-                   height = props.iconSize
-                   fontSize = props.iconSize
-                   marginRight = props.iconSpacing
-                   position = Position.absolute
-                   right = 100.pct
-                   top = 50.pct
-                   textAlign = TextAlign.center
-                   verticalAlign = VerticalAlign.middle
-                   lineHeight = LineHeight(props.iconSize.toString())
-                   transform = Transforms().apply {
-                       translateY((-50).pct)
-                   }
-               }
+                css { +IconInputStyles.icon(props) }
 
                 attrs { classes = setOf(props.iconName, props.iconStyle)}
             }
 
             styledInput {
-                css {
-                    width = 100.pct
-                }
+
+                css { +IconInputStyles.input }
+
                 attrs(props.attrs)
             }
         }
