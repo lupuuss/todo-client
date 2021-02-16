@@ -8,15 +8,12 @@ import kotlinx.coroutines.*
 import kotlinx.css.*
 import kotlinx.html.ButtonType
 import kotlinx.html.InputType
-import kotlinx.html.classes
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onSubmitFunction
 import org.kodein.di.instance
 import org.w3c.dom.events.Event
 import react.*
-import react.dom.button
 import react.dom.div
-import react.dom.i
 import styled.*
 
 external interface LoginProps : RProps {
@@ -104,9 +101,7 @@ class Login : RComponent<LoginProps, LoginState>(), CoroutineScope by MainScope(
                     onSubmitFunction = this@Login::login
                 }
 
-                css {
-                    +LoginStyles.form
-                }
+                css { +LoginStyles.form }
 
                 iconInput {
                     iconName = "fa-user"

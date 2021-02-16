@@ -1,6 +1,6 @@
 package com.github.lupuuss.todo.client.js.react.common
 
-import kotlinx.css.CSSBuilder
+import kotlinx.css.*
 import kotlinx.html.ButtonType
 import react.RBuilder
 import react.RComponent
@@ -23,7 +23,15 @@ class LoadingButton : RComponent<LoadingButtonProps, dynamic>() {
 
         styledButton {
 
-            css { props.css?.invoke(this) }
+            css {
+                props.css?.invoke(this)
+
+                if (props.isLoading) {
+                    +LoadingButtonStyles.loadingStyle
+                } else {
+                    +LoadingButtonStyles.readyStyle
+                }
+            }
 
             if (!props.isLoading) {
 
@@ -41,6 +49,7 @@ class LoadingButton : RComponent<LoadingButtonProps, dynamic>() {
 
             attrs {
                 type = props.type
+                disabled = props.isLoading
             }
         }
     }
