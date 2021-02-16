@@ -31,11 +31,6 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
             height = 100.pct
         }
 
-        label {
-            display = Display.block
-            fontSize = 2.rem
-        }
-
         input {
             borderRadius = 5.px
             borderColor = Color.transparent
