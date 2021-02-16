@@ -3,6 +3,7 @@ package com.github.lupuuss.todo.client.js.react.login
 import com.github.lupuuss.todo.client.core.TodoKodein
 import com.github.lupuuss.todo.client.core.auth.AuthManager
 import com.github.lupuuss.todo.client.js.react.common.iconInput
+import com.github.lupuuss.todo.client.js.react.common.loadingButton
 import kotlinx.coroutines.*
 import kotlinx.css.*
 import kotlinx.html.ButtonType
@@ -130,15 +131,11 @@ class Login : RComponent<LoginProps, LoginState>(), CoroutineScope by MainScope(
                     }
                 }
 
-                styledButton {
-
-                    css { +LoginStyles.submitButton }
-
-                    attrs {
-                        type = ButtonType.submit
-                    }
-
-                    +"LOGIN"
+                loadingButton {
+                    isLoading = state.isLoading
+                    text = "LOGIN"
+                    type = ButtonType.submit
+                    css = LoginStyles.submitButton
                 }
             }
         }
