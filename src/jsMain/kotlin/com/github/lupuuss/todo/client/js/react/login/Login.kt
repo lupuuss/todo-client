@@ -4,6 +4,7 @@ import com.github.lupuuss.todo.client.core.TodoKodein
 import com.github.lupuuss.todo.client.core.auth.AuthManager
 import com.github.lupuuss.todo.client.js.react.common.iconInput
 import kotlinx.coroutines.*
+import kotlinx.css.*
 import kotlinx.html.ButtonType
 import kotlinx.html.InputType
 import kotlinx.html.classes
@@ -107,7 +108,9 @@ class Login : RComponent<LoginProps, LoginState>(), CoroutineScope by MainScope(
                 }
 
                 iconInput {
-                    iconSettings = setOf("fa", "fa-camera-retro", "fa-5x")
+                    iconName = "fa-user"
+                    LoginStyles.iconInput(this)
+
                     attrs = {
                         it.type = InputType.text
                         it.value = state.login
@@ -116,7 +119,10 @@ class Login : RComponent<LoginProps, LoginState>(), CoroutineScope by MainScope(
                 }
 
                 iconInput {
-                    iconSettings = setOf("fa", "fa-camera-retro", "fa-5x")
+
+                    iconName = "fa-unlock-alt"
+                    LoginStyles.iconInput(this)
+
                     attrs = {
                         it.type = InputType.password
                         it.value = state.password
@@ -124,7 +130,9 @@ class Login : RComponent<LoginProps, LoginState>(), CoroutineScope by MainScope(
                     }
                 }
 
-                button {
+                styledButton {
+
+                    css { +LoginStyles.submitButton }
 
                     attrs {
                         type = ButtonType.submit
