@@ -33,11 +33,7 @@ class TodoApp(props: dynamic) : RComponent<dynamic, dynamic>(props) {
 
             styledDiv {
 
-                css {
-                    width = LinearDimension.auto
-                    height = 100.pct
-                    backgroundColor = Colors.secondary
-                }
+                css { +TodoStyles.container }
 
                 switch {
 
