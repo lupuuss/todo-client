@@ -5,6 +5,7 @@ import kotlinx.css.*
 import react.RBuilder
 import react.RComponent
 import react.ReactElement
+import react.router.dom.routeLink
 import styled.css
 import styled.styledDiv
 
@@ -20,8 +21,10 @@ class TopBar : RComponent<dynamic, dynamic>() {
                 flexDirection = FlexDirection.row
             }
 
-            logo {
-                title = "TO-DO"
+            routeLink("/") {
+                logo {
+                    title = "TO-DO"
+                }
             }
         }
     }

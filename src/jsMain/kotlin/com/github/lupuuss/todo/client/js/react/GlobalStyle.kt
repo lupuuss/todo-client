@@ -36,6 +36,10 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
             height = 100.pct
         }
 
+        a {
+            textDecoration = TextDecoration.none
+        }
+
         input {
             outline = Outline.none
             borderRadius = 1.rem
