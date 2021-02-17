@@ -6,6 +6,4 @@ import com.github.lupuuss.todo.api.core.user.User
 interface AuthApi {
 
     suspend fun login(credentials: Credentials): String
-
-    suspend fun me(): User
 }

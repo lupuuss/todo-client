@@ -1,7 +1,8 @@
-package com.github.lupuuss.todo.client.core.api.task
+package com.github.lupuuss.todo.client.core.api.me
 
 import com.github.lupuuss.todo.api.core.Page
 import com.github.lupuuss.todo.api.core.task.Task
+import com.github.lupuuss.todo.api.core.user.User
 import com.github.lupuuss.todo.client.core.api.KtorClientBase
 import io.ktor.client.*
 import kotlinx.serialization.Serializable
@@ -12,9 +13,9 @@ import kotlinx.serialization.json.Json
 @Serializable
 internal class PageWrapper(val page: Page<Task>)
 
-class KtorTaskApi(baseUrl: String, client: HttpClient) : KtorClientBase(baseUrl, client), TasksApi {
+class KtorCurrentUserApi(baseUrl: String, client: HttpClient) : KtorClientBase(baseUrl, client), CurrentUserApi {
 
-    override suspend fun getTasks(pageNumber: Int, pageSize: Int, status: Task.Status?): Page<Task> {
+    override suspend fun getMyTasks(pageNumber: Int, pageSize: Int, status: Task.Status?): Page<Task> {
 
         // as kotlinx.serialization doesn't fully support generics for now,
         // deserialization of Page<T> requires simple wrapper to work
@@ -28,5 +29,9 @@ class KtorTaskApi(baseUrl: String, client: HttpClient) : KtorClientBase(baseUrl,
         val tmp = "{ \"page\": $json }"
 
         return Json.decodeFromString<PageWrapper>(tmp).page
+    }
+
+    override suspend fun me(): User {
+        return get("/me")
     }
 }

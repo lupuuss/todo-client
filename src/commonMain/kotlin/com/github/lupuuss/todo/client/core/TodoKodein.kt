@@ -2,8 +2,8 @@ package com.github.lupuuss.todo.client.core
 
 import com.github.lupuuss.todo.client.core.api.auth.AuthApi
 import com.github.lupuuss.todo.client.core.api.auth.KtorAuthApi
-import com.github.lupuuss.todo.client.core.api.task.KtorTaskApi
-import com.github.lupuuss.todo.client.core.api.task.TasksApi
+import com.github.lupuuss.todo.client.core.api.me.KtorCurrentUserApi
+import com.github.lupuuss.todo.client.core.api.me.CurrentUserApi
 import com.github.lupuuss.todo.client.core.auth.AuthManager
 import com.github.lupuuss.todo.client.core.auth.JwtAuth
 import com.github.lupuuss.todo.client.core.repository.TaskRepository
@@ -47,11 +47,11 @@ object TodoKodein {
                     }
                 }
             }
-            bind<TasksApi>() with singleton { KtorTaskApi(baseUrl, instance()) }
+            bind<CurrentUserApi>() with singleton { KtorCurrentUserApi(baseUrl, instance()) }
             bind<TaskRepository>() with singleton { TaskRepository(instance()) }
 
             bind<AuthApi>() with singleton{ KtorAuthApi(baseUrl, instance(tag = "Auth")) }
-            bind<AuthManager>() with singleton { AuthManager(instance(), instance()) }
+            bind<AuthManager>() with singleton { AuthManager(instance(), instance(), instance()) }
         }
     }
 }
