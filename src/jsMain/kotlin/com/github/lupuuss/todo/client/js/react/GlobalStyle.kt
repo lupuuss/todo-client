@@ -5,6 +5,7 @@ import kotlinx.css.properties.*
 import react.RBuilder
 import react.RComponent
 import react.ReactElement
+import styled.animation
 import styled.injectGlobal
 
 class GlobalStyle : RComponent<dynamic, dynamic>() {
@@ -24,11 +25,12 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
         }
 
         html {
-            fontFace {
-                color = Colors.fontColor
-            }
-            fontSize = 10.px
             height = 100.pct
+        }
+
+        rule("html, body, div") {
+            color = Colors.fontColor
+            fontSize = 10.px
             fontFamily = "'Roboto', sans-serif"
         }
 
@@ -40,17 +42,43 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
             textDecoration = TextDecoration.none
         }
 
-        input {
+        rule("button, input") {
+            boxShadow(color = rgba(0,0,0,0.12), offsetX = 0.px, offsetY = 3.px, blurRadius = 5.px)
+            boxShadow(color =  rgba(0,0,0,0.24), offsetX = 0.px, offsetY = 3.px, blurRadius = 4.px)
+        }
+
+        rule("button") {
+            hover {
+                boxShadow(color = rgba(0,0,0,0.25), offsetX = 0.px, offsetY = 14.px, blurRadius = 28.px)
+                boxShadow(color =  rgba(0,0,0,0.22), offsetX = 0.px, offsetY = 10.px, blurRadius = 10.px)
+            }
+        }
+
+        rule("button, input") {
             outline = Outline.none
             borderRadius = 3.rem
             borderColor = Color.transparent
-            borderWidth = 1.px
-
-            fontSize = 2.rem
-            color = Colors.primary
             fontFamily = "'Roboto', sans-serif"
+            fontSize = 2.rem
             padding(2.rem)
+        }
 
+        rule("p, input, button") {
+            animation(duration = Time("200ms"), timing = Timing.easeInOut) {
+                from {
+                    opacity = 0
+                }
+
+                to {
+                    opacity = 1
+                }
+            }
+        }
+
+        input {
+
+            color = Colors.primary
+            borderWidth = 1.px
             transition("all",Time("200ms"), Timing.easeInOut)
 
             rule(":focus, :hover") {
@@ -60,24 +88,15 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
         }
 
         button {
-            outline = Outline.none
-            borderRadius = 3.rem
-            borderColor = Color.transparent
-            color = Colors.fontColor
-            fontFamily = "'Roboto', sans-serif"
-            fontSize = 2.rem
-            cursor = Cursor.pointer
-            padding(2.rem)
 
+            color = Colors.fontColor
+            cursor = Cursor.pointer
             backgroundColor = Colors.contrast
 
-            transition("all", Time("200ms"), Timing.easeInOut)
+            transition("all", Time("200ms"), Timing("cubic-bezier(.25,.8,.25,1)"))
 
-            hover {
+            active {
                 backgroundColor = Colors.contrastSecondary
-                transform {
-                    scale(1.02)
-                }
             }
         }
 

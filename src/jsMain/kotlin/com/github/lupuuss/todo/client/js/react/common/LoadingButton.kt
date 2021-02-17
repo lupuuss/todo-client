@@ -8,7 +8,7 @@ import react.RProps
 import react.ReactElement
 import styled.css
 import styled.styledButton
-import styled.styledDiv
+import styled.styledP
 
 external interface LoadingButtonProps : RProps{
     var text: String
@@ -39,9 +39,10 @@ class LoadingButton : RComponent<LoadingButtonProps, dynamic>() {
 
             } else {
 
-                styledDiv {
+                styledP {
                     css {
                         classes = mutableListOf("fas", "fa-spinner", "fa-pulse")
+                        +LoadingButtonStyles.loadingIcon
                     }
                 }
 

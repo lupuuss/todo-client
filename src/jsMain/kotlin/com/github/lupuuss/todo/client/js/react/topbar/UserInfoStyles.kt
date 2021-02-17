@@ -1,19 +1,24 @@
 package com.github.lupuuss.todo.client.js.react.topbar
 
-import com.github.lupuuss.todo.client.js.react.Colors
 import com.github.lupuuss.todo.client.js.react.NamedStylesheet
 import kotlinx.css.*
 import kotlinx.css.properties.LineHeight
 
 object UserInfoStyles : NamedStylesheet() {
 
+    val userContainer by css {
+        display = Display.flex
+        flexDirection = FlexDirection.row
+        alignItems = Align.center
+        child(":not(:last-child)") {
+            margin(right = 2.rem)
+        }
+    }
     val userName by css {
-        color = Colors.fontColor
         fontSize = 3.rem
     }
 
     val userIcon by css {
-        color = Colors.fontColor
 
         val size = 3.rem
 

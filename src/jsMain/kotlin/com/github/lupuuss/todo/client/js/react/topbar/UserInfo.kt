@@ -7,7 +7,7 @@ import com.github.lupuuss.todo.client.js.react.common.iconButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.css.rem
+import kotlinx.css.*
 import org.kodein.di.instance
 import org.w3c.dom.events.Event
 import react.RBuilder
@@ -16,6 +16,7 @@ import react.RState
 import react.setState
 import styled.css
 import styled.styledDiv
+import styled.styledP
 
 external interface UserInfoState : RState {
     var currentUser: User?
@@ -67,22 +68,29 @@ class UserInfo : RComponent<dynamic, UserInfoState>(), AuthManager.OnAuthStatusC
 
         styledDiv {
 
-            css { +UserInfoStyles.container }
+            css {
+                +UserInfoStyles.container
+            }
 
-            state.currentUser?.let { user ->
-                styledDiv {
-                    css { +UserInfoStyles.userName }
-                    +user.login
-                }
+            styledDiv {
 
-                styledDiv {
+                css { +UserInfoStyles.userContainer }
 
-                    css {
-                        classes = when (user.role) {
-                            User.Role.USER -> mutableListOf("fa", "fa-user")
-                            User.Role.ADMIN -> mutableListOf("fa", "fa-user-shield")
+                state.currentUser?.let { user ->
+                    styledP {
+                        css { +UserInfoStyles.userName }
+                        +user.login
+                    }
+
+                    styledP {
+
+                        css {
+                            classes = when (user.role) {
+                                User.Role.USER -> mutableListOf("fa", "fa-user")
+                                User.Role.ADMIN -> mutableListOf("fa", "fa-user-shield")
+                            }
+                            +UserInfoStyles.userIcon
                         }
-                        +UserInfoStyles.userIcon
                     }
                 }
             }

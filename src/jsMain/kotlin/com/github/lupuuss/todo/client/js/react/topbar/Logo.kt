@@ -5,6 +5,7 @@ import react.RComponent
 import react.RProps
 import styled.css
 import styled.styledDiv
+import styled.styledP
 
 external interface LogoProps : RProps {
     var title: String
@@ -13,7 +14,7 @@ external interface LogoProps : RProps {
 class Logo : RComponent<LogoProps, dynamic>() {
 
     override fun RBuilder.render() {
-        styledDiv {
+        styledP {
             css { +LogoStyle.logo }
             +props.title
         }
