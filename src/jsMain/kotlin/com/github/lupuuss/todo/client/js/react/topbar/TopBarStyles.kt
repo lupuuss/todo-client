@@ -7,6 +7,7 @@ import kotlinx.css.*
 object TopBarStyles : NamedStylesheet() {
 
     val container by css {
+
         backgroundColor = Colors.primary
         borderWidth = 0.0.px
         borderBottomWidth = 0.5.rem
@@ -14,5 +15,7 @@ object TopBarStyles : NamedStylesheet() {
         borderStyle = BorderStyle.solid
         display = Display.flex
         flexDirection = FlexDirection.row
+        alignItems = Align.center
+        justifyContent = JustifyContent.spaceBetween
     }
 }

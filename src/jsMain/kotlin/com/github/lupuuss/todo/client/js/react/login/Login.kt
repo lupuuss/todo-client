@@ -17,9 +17,6 @@ import react.*
 import react.dom.div
 import styled.*
 
-external interface LoginProps : RProps {
-    var onSuccess: () -> Unit
-}
 
 external interface LoginState : RState {
     var isLoading: Boolean
@@ -28,7 +25,7 @@ external interface LoginState : RState {
     var password: String
 }
 
-class Login : RComponent<LoginProps, LoginState>(), CoroutineScope by MainScope() {
+class Login : RComponent<dynamic, LoginState>(), CoroutineScope by MainScope() {
 
     private val di = TodoKodein.di
 
@@ -58,8 +55,6 @@ class Login : RComponent<LoginProps, LoginState>(), CoroutineScope by MainScope(
             try {
 
                 authManager.login(state.login, state.password)
-
-                props.onSuccess()
 
             } catch (e: Exception) {
 
@@ -139,6 +134,4 @@ class Login : RComponent<LoginProps, LoginState>(), CoroutineScope by MainScope(
     }
 }
 
-fun RBuilder.login(handler: LoginProps.() -> Unit): ReactElement = child(Login::class) {
-    this.attrs(handler)
-}
+fun RBuilder.login(): ReactElement = child(Login::class) {}
