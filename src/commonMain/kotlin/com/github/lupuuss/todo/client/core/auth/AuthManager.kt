@@ -7,6 +7,8 @@ import com.github.lupuuss.todo.client.core.api.me.CurrentUserApi
 
 class AuthFailedException(cause: Throwable) : Exception(cause = cause)
 
+class CurrentUserObjectException(cause: Throwable) : Exception(cause = cause)
+
 class AuthManager(
     private val authApi: AuthApi,
     private val tokenHolder: TokenHolder,
@@ -40,7 +42,13 @@ class AuthManager(
     }
 
     suspend fun currentUser(): User {
-        return currentUser ?: userApi.me()
+        return currentUser ?: try {
+
+            userApi.me().also { currentUser = it }
+
+        } catch (e: Throwable) {
+            throw CurrentUserObjectException(e)
+        }
     }
 
     fun logout() {
