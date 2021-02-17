@@ -15,6 +15,7 @@ import react.dom.i
 import styled.css
 import styled.styledDiv
 import styled.styledInput
+import styled.styledP
 
 external interface IconInputProps : RProps {
     var iconName: String
@@ -32,7 +33,7 @@ class IconInput : RComponent<IconInputProps, dynamic>() {
 
             css { +IconInputStyles.container }
 
-            styledDiv {
+            styledP {
 
                 css { +IconInputStyles.icon(props) }
 
