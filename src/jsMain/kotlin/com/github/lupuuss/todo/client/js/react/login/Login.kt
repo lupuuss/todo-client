@@ -10,6 +10,7 @@ import kotlinx.html.ButtonType
 import kotlinx.html.InputType
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onSubmitFunction
+import kotlinx.html.spellCheck
 import org.kodein.di.instance
 import org.w3c.dom.events.Event
 import react.*
@@ -109,6 +110,7 @@ class Login : RComponent<LoginProps, LoginState>(), CoroutineScope by MainScope(
 
                     attrs = {
                         it.type = InputType.text
+                        it.spellCheck = false
                         it.value = state.login
                         it.onChangeFunction = this@Login::onLoginChange
                     }
