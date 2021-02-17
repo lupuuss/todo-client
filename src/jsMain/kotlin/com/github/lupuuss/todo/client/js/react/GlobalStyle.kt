@@ -42,7 +42,7 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
 
         input {
             outline = Outline.none
-            borderRadius = 1.rem
+            borderRadius = 3.rem
             borderColor = Color.transparent
             borderWidth = 1.px
 
@@ -61,7 +61,7 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
 
         button {
             outline = Outline.none
-            borderRadius = 1.rem
+            borderRadius = 3.rem
             borderColor = Color.transparent
             color = Colors.fontColor
             fontFamily = "'Roboto', sans-serif"

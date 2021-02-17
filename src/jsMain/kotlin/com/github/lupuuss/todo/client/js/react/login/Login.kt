@@ -48,7 +48,7 @@ class Login : RComponent<dynamic, LoginState>(), CoroutineScope by MainScope() {
 
         launch {
 
-            setState {
+            setStateIfActive {
                 isLoading = true
             }
 
@@ -60,16 +60,22 @@ class Login : RComponent<dynamic, LoginState>(), CoroutineScope by MainScope() {
 
                 e.printStackTrace()
 
-                setState {
+                setStateIfActive {
                     error = "Authentication failed :("
                     login = ""
                     password = ""
                 }
             }
 
-            setState {
+            setStateIfActive {
                 isLoading = false
             }
+        }
+    }
+
+    private fun setStateIfActive(state: LoginState.() -> Unit) {
+        if (isActive) {
+            setState(state)
         }
     }
 
