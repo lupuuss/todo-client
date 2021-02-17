@@ -3,6 +3,7 @@ package com.github.lupuuss.todo.client.js.react
 import kotlinx.css.Color
 
 object Colors {
+    val primaryShadow = Color("#666364")
     val primary = Color("#373234")
     val secondary = Color("#615d54")
     val contrast = Color("#FF5400")

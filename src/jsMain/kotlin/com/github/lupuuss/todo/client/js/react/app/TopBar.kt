@@ -1,7 +1,5 @@
 package com.github.lupuuss.todo.client.js.react.app
 
-import com.github.lupuuss.todo.client.js.react.Colors
-import kotlinx.css.*
 import react.RBuilder
 import react.RComponent
 import react.ReactElement
@@ -15,11 +13,7 @@ class TopBar : RComponent<dynamic, dynamic>() {
 
         styledDiv {
 
-            css {
-                backgroundColor = Colors.primary
-                display = Display.flex
-                flexDirection = FlexDirection.row
-            }
+            css { +TopBarStyles.container }
 
             routeLink("/") {
                 logo {
