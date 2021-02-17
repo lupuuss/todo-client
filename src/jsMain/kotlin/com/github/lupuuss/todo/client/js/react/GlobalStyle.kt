@@ -53,12 +53,7 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
 
             transition("all",Time("200ms"), Timing.easeInOut)
 
-            focus {
-                boxShadow(offsetX = 0.px, offsetY = 0.5.px, blurRadius = 5.px, color = Colors.contrastSecondary)
-                border(1.px, BorderStyle.solid, Colors.contrastSecondary)
-            }
-
-            hover {
+            rule(":focus, :hover") {
                 boxShadow(offsetX = 0.px, offsetY = 0.5.px, blurRadius = 5.px, color = Colors.contrast)
                 border(1.px, BorderStyle.solid, Colors.contrast)
             }
