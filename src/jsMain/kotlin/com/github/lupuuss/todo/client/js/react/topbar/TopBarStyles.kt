@@ -1,4 +1,4 @@
-package com.github.lupuuss.todo.client.js.react.app
+package com.github.lupuuss.todo.client.js.react.topbar
 
 import com.github.lupuuss.todo.client.js.react.Colors
 import com.github.lupuuss.todo.client.js.react.NamedStylesheet

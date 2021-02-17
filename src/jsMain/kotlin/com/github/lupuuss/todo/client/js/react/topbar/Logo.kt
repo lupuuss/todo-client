@@ -1,4 +1,4 @@
-package com.github.lupuuss.todo.client.js.react.app
+package com.github.lupuuss.todo.client.js.react.topbar
 
 import react.RBuilder
 import react.RComponent

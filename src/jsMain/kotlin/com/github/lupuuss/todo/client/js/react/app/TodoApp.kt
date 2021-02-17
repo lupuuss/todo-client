@@ -2,11 +2,10 @@ package com.github.lupuuss.todo.client.js.react.app
 
 import com.github.lupuuss.todo.client.core.TodoKodein
 import com.github.lupuuss.todo.client.core.auth.AuthManager
-import com.github.lupuuss.todo.client.js.react.Colors
 import com.github.lupuuss.todo.client.js.react.globalStyle
 import com.github.lupuuss.todo.client.js.react.home.home
 import com.github.lupuuss.todo.client.js.react.login.login
-import kotlinx.css.*
+import com.github.lupuuss.todo.client.js.react.topbar.topBar
 import org.kodein.di.instance
 import react.RBuilder
 import react.RComponent
