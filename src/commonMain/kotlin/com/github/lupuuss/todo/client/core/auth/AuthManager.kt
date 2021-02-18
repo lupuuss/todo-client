@@ -4,6 +4,9 @@ import com.github.lupuuss.todo.api.core.user.Credentials
 import com.github.lupuuss.todo.api.core.user.User
 import com.github.lupuuss.todo.client.core.api.auth.AuthApi
 import com.github.lupuuss.todo.client.core.api.me.CurrentUserApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
 
 class AuthFailedException(cause: Throwable) : Exception(cause = cause)
 
@@ -12,8 +15,9 @@ class CurrentUserObjectException(cause: Throwable) : Exception(cause = cause)
 class AuthManager(
     private val authApi: AuthApi,
     private val tokenHolder: TokenHolder,
-    private val userApi: CurrentUserApi
-    ) {
+    private val userApi: CurrentUserApi,
+    context: CoroutineContext
+    ): CoroutineScope by CoroutineScope(context) {
 
     fun interface OnAuthStatusChangedListener {
         fun onAuthChanged(user: User?)
@@ -23,7 +27,7 @@ class AuthManager(
 
     private var currentUser: User? = null
 
-    suspend fun login(login: String, password: String) {
+    suspend fun login(login: String, password: String) = withContext(coroutineContext) {
 
         try {
             val token = authApi.login(Credentials(login, password))
@@ -42,12 +46,14 @@ class AuthManager(
     }
 
     suspend fun currentUser(): User {
-        return currentUser ?: try {
+        return withContext(coroutineContext) {
+            currentUser ?: try {
 
-            userApi.me().also { currentUser = it }
+                userApi.me().also { currentUser = it }
 
-        } catch (e: Throwable) {
-            throw CurrentUserObjectException(e)
+            } catch (e: Throwable) {
+                throw CurrentUserObjectException(e)
+            }
         }
     }
 
