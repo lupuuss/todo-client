@@ -2,6 +2,8 @@ package com.github.lupuuss.todo.client.core
 
 import com.github.lupuuss.todo.client.core.api.auth.AuthApi
 import com.github.lupuuss.todo.client.core.api.auth.KtorAuthApi
+import com.github.lupuuss.todo.client.core.api.live.KtorWebSocketLiveApi
+import com.github.lupuuss.todo.client.core.api.live.LiveApi
 import com.github.lupuuss.todo.client.core.api.me.KtorMyTasksApi
 import com.github.lupuuss.todo.client.core.api.me.MyTasksApi
 import com.github.lupuuss.todo.client.core.auth.AuthManager
@@ -10,6 +12,7 @@ import com.github.lupuuss.todo.client.core.repository.MyTaskRepository
 import io.ktor.client.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
+import io.ktor.client.features.websocket.*
 import org.kodein.di.*
 
 
@@ -19,12 +22,19 @@ object TodoKodein {
     private set
 
     private const val baseUrl = "http://localhost:9090"
+    private const val baseUrlWs = "ws://localhost:9090"
 
     fun init(platformSpecific: DI.MainBuilder.() -> Unit) {
 
         di = DI {
 
             platformSpecific()
+
+            bind<HttpClient>(tag = "WebSocket") with singleton {
+                HttpClient {
+                    install(WebSockets)
+                }
+            }
 
             bind<HttpClient>(tag = "Auth") with singleton {
                 HttpClient() {
@@ -53,7 +63,31 @@ object TodoKodein {
                 }
             }
             bind<MyTasksApi>() with singleton { KtorMyTasksApi(baseUrl, instance()) }
-            bind<MyTaskRepository>() with singleton { MyTaskRepository(instance(), instance(tag = "Networking")) }
+
+            bind<LiveApi>() with singleton {
+                KtorWebSocketLiveApi(
+                    instance(),
+                    baseUrlWs,
+                    instance(tag = "WebSocket"),
+                    instance(tag = "Networking")
+                )
+            }
+
+            bind<SessionKodein>() with singleton {
+                SessionKodein(di) {
+
+                    myTaskRepositoryHandler = object : InstanceHandler<MyTaskRepository> {
+
+                        override fun provide() =
+                            MyTaskRepository(instance(), instance(), instance(tag = "Networking")).apply { init() }
+
+                        override fun clean(instance: MyTaskRepository) = instance.close()
+
+                    }
+                }
+            }
+
+            bind<MyTaskRepository>() with provider { instance<SessionKodein>().myTaskRepository!! }
         }
     }
 }

@@ -1,45 +1,113 @@
 package com.github.lupuuss.todo.client.core.repository
 
+import com.github.lupuuss.todo.api.core.live.ItemChange
+import com.github.lupuuss.todo.api.core.live.Operation.*
 import com.github.lupuuss.todo.api.core.task.Task
+import com.github.lupuuss.todo.api.core.user.User
+import com.github.lupuuss.todo.client.core.api.live.LiveApi
 import com.github.lupuuss.todo.client.core.api.me.MyTasksApi
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 interface TaskListener : CoroutineScope {
 
-    fun onTasksAppend(tasks: List<Task>, group: Task.Status)
+    fun onTasksAppend(tasks: List<Task>)
     fun onNewTask(task: Task)
-    fun onTaskChanged(task: Task, oldGroup: Task.Status, newGroup: Task.Status?)
-    fun onTaskRemoved(id: String, group: Task.Status)
+    fun onTaskChanged(task: Task)
+    fun onTasksRemoved(ids: List<String>)
 }
 
 class MyTaskRepository(
     private val taskApi: MyTasksApi,
+    private val liveApi: LiveApi,
     context: CoroutineContext
-): CoroutineScope by CoroutineScope(context) {
+): CoroutineScope by CoroutineScope(context), LiveApi.Listener {
 
     private val listeners = mutableListOf<TaskListener>()
 
-    private val statusByPriority = listOf(Task.Status.IN_PROGRESS, Task.Status.NOT_STARTED, Task.Status.DONE)
-
-    private val tasksGroups = statusByPriority.map { it to LinkedHashMap<String, Task>() }.toMap()
-
-    private var currentStatusIndex = 0
+    private var tasks = LinkedHashMap<String, Task>()
 
     private val pageSize = 10
     private var currentPage = 0
 
     private var currentJob: Job? = null
 
-    fun addTasksListener(listener: TaskListener) {
-        listeners.add(listener)
+    fun init() {
+        liveApi.addOnChangeListener(this)
+    }
 
-        for ((status, group) in tasksGroups) {
+    fun close() {
+        liveApi.removeOnChangeListener(this)
+    }
 
-            listener.launch {
-                notifyAppendItems(group.values.toList(), status)
+    private fun callListeners(calls: TaskListener.() -> Unit) = launch {
+        listeners.forEach { listener ->
+
+            withContext(listener.coroutineContext) {
+
+                listener.calls()
             }
         }
+    }
+
+    override fun onTaskChange(change: ItemChange<Task>) {
+
+        when (change.opType) {
+            DELETE -> handleDelete(change)
+            DELETE_ALL -> handleAllDelete()
+            INSERT -> handleInsert(change)
+            UPDATE -> handleUpdate(change)
+        }
+    }
+
+    override fun onUserChange(change: ItemChange<User>) = Unit
+
+    private fun handleUpdate(change: ItemChange<Task>) {
+        val id = change.id!!
+        val task = change.item!!
+
+        if (tasks.containsKey(id)) {
+            tasks[id] = task
+
+            callListeners { onTaskChanged(task) }
+        }
+    }
+
+    private fun handleInsert(change: ItemChange<Task>) {
+
+        val newTasks = LinkedHashMap<String, Task>(tasks.size + 1)
+
+        newTasks[change.id!!] = change.item!!
+        newTasks.putAll(tasks)
+
+        tasks = newTasks
+
+        callListeners {
+            onNewTask(change.item!!)
+        }
+    }
+
+    private fun handleDelete(change: ItemChange<Task>) {
+        val removedTask = tasks.remove(change.id) ?: return
+
+        callListeners {
+            onTasksRemoved(listOf(removedTask.id))
+        }
+    }
+
+    private fun handleAllDelete() {
+
+        callListeners {
+            onTasksRemoved(tasks.map { it.value.id })
+        }
+        tasks.clear()
+    }
+
+    fun addTasksListener(listener: TaskListener) {
+
+        listeners.add(listener)
+
+        notifyAppendItems(tasks.values.toList())
     }
 
     fun removeTasksListener(listener: TaskListener) {
@@ -56,51 +124,41 @@ class MyTaskRepository(
 
     private fun startLoadMore() = launch {
 
-        var availableMore: Boolean
-
         var inserted = 0
         do {
 
-            val currentStatus = statusByPriority[currentStatusIndex]
 
-            val page = taskApi.getMyTasks(currentPage, pageSize, currentStatus)
-
-            val group = tasksGroups[currentStatus]!!
+            val page = taskApi.getMyTasks(currentPage, pageSize)
 
             val insertedList = mutableListOf<Task>()
 
             for (task in page.elements) {
 
-                if (!group.containsKey(task.id)) {
+                if (!tasks.containsKey(task.id)) {
 
-                    group[task.id] = task
+                    tasks[task.id] = task
                     insertedList += task
 
                     inserted++
                 }
             }
 
-            notifyAppendItems(insertedList, currentStatus)
+            notifyAppendItems(insertedList)
 
-            availableMore = page.nextPage != null || currentStatusIndex != statusByPriority.lastIndex
-
-            if (page.nextPage == null && currentStatusIndex != statusByPriority.lastIndex) {
-                currentStatusIndex++
+            page.nextPage?.let {
+                currentPage = it
             }
 
-        } while(availableMore && inserted < pageSize)
+        } while(page.nextPage != null && inserted < pageSize)
 
     }
 
-    private fun notifyAppendItems(insertedList: List<Task>, status: Task.Status) {
+    private fun notifyAppendItems(insertedList: List<Task>) {
 
         if (insertedList.isEmpty()) return
 
-        for (listener in listeners) {
-
-            listener.launch {
-                listener.onTasksAppend(insertedList, status)
-            }
+        callListeners {
+            onTasksAppend(insertedList)
         }
     }
 

@@ -18,11 +18,7 @@ class MyTasks : RComponent<dynamic, dynamic>(), CoroutineScope by MainScope(), T
 
     private val repository: MyTaskRepository by TodoKodein.di.instance()
 
-    private val tasksGroups = mapOf<Task.Status, MutableList<Task>>(
-        Task.Status.IN_PROGRESS to mutableListOf(),
-        Task.Status.NOT_STARTED to mutableListOf(),
-        Task.Status.DONE to mutableListOf()
-    )
+    private val tasks = mutableListOf<Task>()
 
     override fun componentDidMount() {
 
@@ -35,28 +31,27 @@ class MyTasks : RComponent<dynamic, dynamic>(), CoroutineScope by MainScope(), T
         cancel()
     }
 
-    override fun onTasksAppend(tasks: List<Task>, group: Task.Status) {
-        tasksGroups[group]!!.addAll(tasks)
+    override fun onTasksAppend(tasks: List<Task>) {
+        this.tasks.addAll(tasks)
         forceUpdate()
     }
 
     override fun onNewTask(task: Task) {
-        tasksGroups[task.status]!!.add(task)
+        this.tasks.add(0, task)
         forceUpdate()
     }
 
-    override fun onTaskChanged(task: Task, oldGroup: Task.Status, newGroup: Task.Status?) {
+    override fun onTaskChanged(task: Task) {
 
-        val group = newGroup ?: oldGroup
+        val index = tasks.indexOfFirst { it.id == task.id }
 
-        tasksGroups[oldGroup]!!.removeAll { it.id == task.id }
-        tasksGroups[group]!!.add(task)
+        tasks[index] = task
 
         forceUpdate()
     }
 
-    override fun onTaskRemoved(id: String, group: Task.Status) {
-        tasksGroups[group]!!.removeAll { it.id == id }
+    override fun onTasksRemoved(ids: List<String>) {
+        this.tasks.removeAll { ids.contains(it.id) }
         forceUpdate()
     }
 
@@ -65,20 +60,7 @@ class MyTasks : RComponent<dynamic, dynamic>(), CoroutineScope by MainScope(), T
         styledDiv {
             css { +MyTasksStyles.container }
 
-            +"IN PROGRESS"
-            ul {
-                tasksGroups[Task.Status.IN_PROGRESS]!!.map { li { +it.name } }
-            }
-
-            +"NOT STARTED"
-            ul {
-                tasksGroups[Task.Status.NOT_STARTED]!!.map { li { +it.name } }
-            }
-
-            +"DONE"
-            ul {
-                tasksGroups[Task.Status.DONE]!!.map { li { +it.name } }
-            }
+            tasks.map { li { +it.name } }
 
         }
     }
