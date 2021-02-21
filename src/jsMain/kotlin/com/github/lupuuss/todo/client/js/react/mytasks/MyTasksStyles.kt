@@ -11,5 +11,11 @@ object MyTasksStyles : NamedStylesheet() {
         alignItems = Align.center
         height = LinearDimension.fitContent
         width = 700.px
+
+        marginTop = 2.rem
+
+        child(":not(:first-child)") {
+            marginTop = 2.rem
+        }
     }
 }

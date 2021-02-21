@@ -60,7 +60,10 @@ class MyTasks : RComponent<dynamic, dynamic>(), CoroutineScope by MainScope(), T
         styledDiv {
             css { +MyTasksStyles.container }
 
-            tasks.map { li { +it.name } }
+            tasks.map { taskItem {
+                key = it.id
+                task = it
+            } }
 
         }
     }
