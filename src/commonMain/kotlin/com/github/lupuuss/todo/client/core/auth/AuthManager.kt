@@ -3,19 +3,16 @@ package com.github.lupuuss.todo.client.core.auth
 import com.github.lupuuss.todo.api.core.user.Credentials
 import com.github.lupuuss.todo.api.core.user.User
 import com.github.lupuuss.todo.client.core.api.auth.AuthApi
-import com.github.lupuuss.todo.client.core.api.me.CurrentUserApi
+import com.github.lupuuss.todo.client.core.storage.Storage
+import io.ktor.client.features.*
+import io.ktor.http.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
-class AuthFailedException(cause: Throwable) : Exception(cause = cause)
-
-class CurrentUserObjectException(cause: Throwable) : Exception(cause = cause)
-
 class AuthManager(
     private val authApi: AuthApi,
-    private val tokenHolder: TokenHolder,
-    private val userApi: CurrentUserApi,
+    private val storage: Storage,
     context: CoroutineContext
     ): CoroutineScope by CoroutineScope(context) {
 
@@ -23,24 +20,33 @@ class AuthManager(
         fun onAuthChanged(user: User?)
     }
 
+    private val tokenKey = "DefinitelyNotJwtToken"
+
     private val listeners = mutableListOf<OnAuthStatusChangedListener>()
 
     private var currentUser: User? = null
+
+    var token: String? = storage[tokenKey]
+    private set
+
+    private fun setToken(value: String?) {
+        token = value
+        storage[tokenKey] = value
+    }
 
     suspend fun login(login: String, password: String) = withContext(coroutineContext) {
 
         try {
             val token = authApi.login(Credentials(login, password))
 
-            tokenHolder.setToken(token)
+            setToken(token)
 
-            currentUser = userApi.me()
+            currentUser = fetchCurrentUser()
 
             listeners.forEach { it.onAuthChanged(currentUser) }
 
         } catch (e: Throwable) {
-
-            tokenHolder.setToken(null)
+            setToken(null)
             throw AuthFailedException(e)
         }
     }
@@ -49,7 +55,11 @@ class AuthManager(
         return withContext(coroutineContext) {
             currentUser ?: try {
 
-                userApi.me().also { currentUser = it }
+                val user = fetchCurrentUser()
+
+                currentUser = user
+
+                return@withContext user
 
             } catch (e: Throwable) {
                 throw CurrentUserObjectException(e)
@@ -57,14 +67,54 @@ class AuthManager(
         }
     }
 
+    suspend fun refreshToken() = withContext(coroutineContext) {
+
+        try {
+
+            val newToken = authApi.refreshToken(token ?: throw AuthRequiredException())
+
+            setToken(newToken)
+
+        } catch (e: Throwable) {
+
+            throw RefreshFailedException(e)
+
+        }
+
+    }
+
+    private suspend fun fetchCurrentUser(retry: Boolean = false): User {
+
+        try {
+
+            return authApi.me(token ?: throw UnauthorizedException("User is not logged in!"))
+
+        } catch (e: ClientRequestException) {
+
+            if (!retry && e.response.status == HttpStatusCode.Unauthorized) {
+
+                refreshToken()
+
+                return fetchCurrentUser(retry = true)
+            }
+
+            throw CurrentUserObjectException(e)
+
+        } catch (e: Throwable) {
+
+            throw CurrentUserObjectException(e)
+
+        }
+    }
+
     fun logout() {
+        setToken(null)
         currentUser = null
-        tokenHolder.setToken(null)
         listeners.forEach { it.onAuthChanged(currentUser) }
     }
 
     fun isUserLoggedIn(): Boolean {
-        return tokenHolder.isAnyTokenAvailable()
+        return token != null
     }
 
     fun addOnAuthChangedListener(listener: OnAuthStatusChangedListener) {
@@ -75,3 +125,13 @@ class AuthManager(
         listeners.remove(listener)
     }
 }
+
+class AuthRequiredException : Exception("User must login with credentials!")
+
+class RefreshFailedException(cause: Throwable) : Exception(cause)
+
+class AuthFailedException(cause: Throwable) : Exception(cause = cause)
+
+class CurrentUserObjectException(cause: Throwable) : Exception(cause = cause)
+
+class UnauthorizedException(msg: String): Exception(msg)

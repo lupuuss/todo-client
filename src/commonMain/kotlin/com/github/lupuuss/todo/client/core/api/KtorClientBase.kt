@@ -30,10 +30,18 @@ open class KtorClientBase(protected val baseUrl: String, protected val client: H
 
     protected fun getUrl(relativePath: String)  = baseUrl + relativePath
 
-    protected suspend inline fun <reified T> get(path: String, parameters: Map<String, Any?>? = null): T {
+    protected suspend inline fun <reified T> get(
+        path: String,
+        parameters: Map<String, Any?>? = null,
+        noinline block: (HttpRequestBuilder.() -> Unit)? = null
+    ): T {
 
         val url = getUrl(path)
-        return client.get(url.applyParameters(parameters))
+        return if (block == null){
+            client.get(url.applyParameters(parameters))
+        } else {
+            client.get(url.applyParameters(parameters), block = block)
+        }
     }
 
     protected suspend inline fun <reified T> postJson(path: String, body: Any): T {
@@ -41,6 +49,20 @@ open class KtorClientBase(protected val baseUrl: String, protected val client: H
 
             contentType(ContentType.parse("application/json"))
             this.body = body
+        }
+    }
+
+    protected suspend inline fun <reified T> post(
+        path: String,
+        parameters: Map<String, Any?>? = null,
+        noinline block: (HttpRequestBuilder.() -> Unit)? = null
+    ): T {
+
+        val url = getUrl(path)
+        return if (block == null){
+            client.post(url.applyParameters(parameters))
+        } else {
+            client.post(url.applyParameters(parameters), block = block)
         }
     }
 }

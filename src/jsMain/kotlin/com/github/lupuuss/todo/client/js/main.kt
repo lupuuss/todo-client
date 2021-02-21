@@ -1,8 +1,8 @@
 package com.github.lupuuss.todo.client.js
 
 import com.github.lupuuss.todo.client.core.TodoKodein
-import com.github.lupuuss.todo.client.core.auth.JsTokenHolder
-import com.github.lupuuss.todo.client.core.auth.TokenHolder
+import com.github.lupuuss.todo.client.core.storage.BrowserStorage
+import com.github.lupuuss.todo.client.core.storage.Storage
 import com.github.lupuuss.todo.client.js.react.app.TodoApp
 import react.dom.render
 import kotlinx.browser.document
@@ -17,7 +17,7 @@ import kotlin.coroutines.CoroutineContext
 fun main() {
 
     TodoKodein.init {
-        bind<TokenHolder>() with singleton { JsTokenHolder() }
+        bind<Storage>() with singleton { BrowserStorage() }
         bind<CoroutineContext>(tag = "Networking") with provider { Dispatchers.Default }
     }
 

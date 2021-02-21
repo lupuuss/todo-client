@@ -1,7 +1,7 @@
 package com.github.lupuuss.todo.client.core.repository
 
 import com.github.lupuuss.todo.api.core.task.Task
-import com.github.lupuuss.todo.client.core.api.me.CurrentUserApi
+import com.github.lupuuss.todo.client.core.api.me.MyTasksApi
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -14,7 +14,7 @@ interface TaskListener : CoroutineScope {
 }
 
 class MyTaskRepository(
-    private val taskApi: CurrentUserApi,
+    private val taskApi: MyTasksApi,
     context: CoroutineContext
 ): CoroutineScope by CoroutineScope(context) {
 

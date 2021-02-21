@@ -7,21 +7,27 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.util.*
 import io.ktor.util.pipeline.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
-class AuthRequiredException : Exception("First token must be provided manually to TokenHolder!")
+typealias TokenProvider = suspend () -> String?
+typealias TokenRefreshCallback = suspend () -> Unit
 
 class JwtAuth(configure: Configuration) {
 
-    private val authClient: HttpClient = requireNotNull(configure.authClient)
-    private val refreshPath: String = requireNotNull(configure.refreshUrl)
-    private val tokenHolder: TokenHolder = requireNotNull(configure.tokenHolder)
+    private val tokenProvider: TokenProvider = requireNotNull(configure.tokenProvider)
+    private val refreshCallback: TokenRefreshCallback = requireNotNull(configure.tokenRefreshCallback)
 
     private val retryFlag = AttributeKey<Unit>("RetryFlag")
 
+    private val refreshLock = Mutex()
+
     class Configuration {
-        var tokenHolder: TokenHolder? = null
-        var authClient: HttpClient? = null
-        var refreshUrl: String? = null
+        var tokenProvider: TokenProvider? = null
+        var tokenRefreshCallback: TokenRefreshCallback? = null
     }
 
     fun interceptRequestPipeline(pipeline: HttpRequestPipeline) {
@@ -32,7 +38,7 @@ class JwtAuth(configure: Configuration) {
 
         pipeline.intercept(phase) {
 
-            val token = tokenHolder.getToken() ?: throw AuthRequiredException()
+            val token = tokenProvider() ?: throw AuthRequiredException()
 
             context.header("Authorization", "Bearer $token")
         }
@@ -49,13 +55,7 @@ class JwtAuth(configure: Configuration) {
 
             if (context.attributes.contains(retryFlag)) return@intercept
 
-            val token = tokenHolder.getToken() ?: return@intercept
-
-            val newToken = authClient.post<String>(refreshPath) {
-                header("Authorization", "Bearer $token")
-            }
-
-            tokenHolder.setToken(newToken)
+            refreshCallback()
 
             val httpBuilder = HttpRequestBuilder().takeFrom(context.request)
 

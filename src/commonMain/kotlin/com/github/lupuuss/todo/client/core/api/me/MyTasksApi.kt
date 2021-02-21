@@ -4,9 +4,7 @@ import com.github.lupuuss.todo.api.core.Page
 import com.github.lupuuss.todo.api.core.task.Task
 import com.github.lupuuss.todo.api.core.user.User
 
-interface CurrentUserApi {
+interface MyTasksApi {
 
     suspend fun getMyTasks(pageNumber: Int, pageSize: Int, status: Task.Status? = null): Page<Task>
-
-    suspend fun me(): User
 }
