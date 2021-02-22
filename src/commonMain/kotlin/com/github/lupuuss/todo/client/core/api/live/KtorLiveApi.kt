@@ -35,27 +35,18 @@ class KtorWebSocketLiveApi(
 
     private val listeners = mutableListOf<LiveApi.Listener>()
 
-    private var socketJob: Job? = null
-
-    private var startLock = Mutex()
-
     private var firstAuth = true
+
+    private var wsSession: DefaultClientWebSocketSession? = null
 
     override fun addOnChangeListener(listener: LiveApi.Listener) {
         listeners.add(listener)
 
-
         launch {
 
-            val shouldStart = startLock.tryLock()
+            if (wsSession != null) return@launch
 
-            if (!shouldStart) return@launch
-
-            socketJob = this@KtorWebSocketLiveApi.async {
-                handleSocket()
-                startLock.unlock()
-                startLock = Mutex()
-            }
+            handleSocket()
         }
     }
 
@@ -63,7 +54,9 @@ class KtorWebSocketLiveApi(
 
         client.ws("$baseUrl/live") {
 
-            while(true) {
+            wsSession = this
+
+            while(!incoming.isClosedForReceive && !outgoing.isClosedForSend) {
 
                 val command = incoming.receiveOrNull() as? Frame.Text ?: break
 
@@ -72,6 +65,7 @@ class KtorWebSocketLiveApi(
                     Commands.userIncoming -> handleUserChange()
                     Commands.taskIncoming -> handleTaskChange()
                 }
+
             }
         }
 
@@ -121,8 +115,10 @@ class KtorWebSocketLiveApi(
         listeners.remove(listener)
 
         if (listeners.isEmpty()) {
-            socketJob?.cancel()
-            socketJob = null
+            launch {
+                wsSession?.close()
+                wsSession = null
+            }
         }
     }
 }
