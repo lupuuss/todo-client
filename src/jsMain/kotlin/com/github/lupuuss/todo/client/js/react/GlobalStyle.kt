@@ -60,7 +60,6 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
             borderColor = Color.transparent
             fontFamily = "'Roboto', sans-serif"
             fontSize = 2.rem
-            padding(2.rem)
         }
 
         rule("p, input, button") {

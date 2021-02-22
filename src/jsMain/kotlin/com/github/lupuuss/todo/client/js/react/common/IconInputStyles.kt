@@ -14,6 +14,7 @@ object IconInputStyles : NamedStylesheet() {
 
     val input by css {
         width = 100.pct
+        padding(2.rem)
     }
 
     fun icon(props: IconInputProps): RuleSet = {

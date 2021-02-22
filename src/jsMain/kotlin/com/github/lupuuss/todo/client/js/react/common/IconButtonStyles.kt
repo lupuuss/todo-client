@@ -9,7 +9,6 @@ object IconButtonStyles : NamedStylesheet() {
     val button by css {
         width = LinearDimension.fitContent
         height = LinearDimension.fitContent
-
         borderRadius = 50.pct
     }
 
@@ -19,7 +18,9 @@ object IconButtonStyles : NamedStylesheet() {
         width = props.iconSize
         height = props.iconSize
 
-        lineHeight = LineHeight(props.iconSize.toString())
+        margin(1.rem)
+
+        lineHeight = LineHeight((props.iconSize).toString())
         textAlign = TextAlign.center
         verticalAlign = VerticalAlign.middle
     }

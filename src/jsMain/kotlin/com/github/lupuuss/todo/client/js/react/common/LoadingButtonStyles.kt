@@ -12,10 +12,12 @@ object LoadingButtonStyles : NamedStylesheet() {
     val loadingStyle by css {
         cursor = Cursor.notAllowed
         pointerEvents = PointerEvents.none
+        padding(2.rem)
     }
 
     val readyStyle by css {
         cursor = Cursor.pointer
         pointerEvents = PointerEvents.initial
+        padding(2.rem)
     }
 }

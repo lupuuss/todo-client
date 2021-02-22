@@ -6,6 +6,19 @@ import kotlinx.css.*
 
 object TaskItemStyles : NamedStylesheet() {
 
+    val actions by css {
+        display = Display.flex
+        flexDirection = FlexDirection.column
+        child(":not(:first-child)") {
+            marginTop = 1.rem
+        }
+    }
+
+    val content by css {
+        display = Display.flex
+        flexDirection = FlexDirection.column
+        width = 100.pct
+    }
     val nameLine by css {
         display = Display.flex
         flexDirection = FlexDirection.row
@@ -21,7 +34,14 @@ object TaskItemStyles : NamedStylesheet() {
         backgroundColor = Colors.primary
         borderRadius = 2.rem
         width = 100.pct
+        display = Display.flex
+        flexDirection = FlexDirection.row
+        alignItems = Align.center
         padding(2.rem)
+
+        child(":not(:first-child)") {
+            marginLeft = 2.rem
+        }
     }
 
     val font by css {

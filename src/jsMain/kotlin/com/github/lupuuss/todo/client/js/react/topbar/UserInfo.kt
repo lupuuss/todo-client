@@ -96,7 +96,7 @@ class UserInfo : RComponent<dynamic, UserInfoState>(), AuthManager.OnAuthStatusC
             }
 
             iconButton {
-                iconName = "fa-sign-out-alt"
+                iconName = "fa-dungeon"
                 iconStyle = "fas"
                 iconSize = 2.rem
                 onClick = this@UserInfo::logout
