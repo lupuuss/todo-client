@@ -73,7 +73,7 @@ object TodoKodein {
                 )
             }
 
-            bind<SessionKodein>() with singleton {
+            bind<SessionKodein>() with eagerSingleton {
                 SessionKodein(di) {
 
                     myTaskRepositoryHandler = object : InstanceHandler<MyTaskRepository> {
