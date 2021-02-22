@@ -60,12 +60,29 @@ class MyTasks : RComponent<dynamic, dynamic>(), CoroutineScope by MainScope(), T
         styledDiv {
             css { +MyTasksStyles.container }
 
-            tasks.map { taskItem {
-                key = it.id
-                task = it
-            } }
+            tasks.map {
+                taskItem {
+                    key = it.id
+                    task = it
+                    onClickDelete = this@MyTasks::onClickDeleteTask
+                    onClickEdit = this@MyTasks::onClickEditTask
+                    onClickStatus = this@MyTasks::onClickStatusTask
+                }
+            }
 
         }
+    }
+
+    private fun onClickStatusTask(id: String, status: Task.Status) {
+        TODO("Not yet implemented")
+    }
+
+    private fun onClickEditTask(id: String) {
+        TODO("Not yet implemented")
+    }
+
+    private fun onClickDeleteTask(id: String) {
+        TODO("Not yet implemented")
     }
 }
 
