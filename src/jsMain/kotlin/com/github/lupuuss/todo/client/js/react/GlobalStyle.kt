@@ -72,6 +72,7 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
 
         input {
 
+            padding(1.rem)
             color = Colors.primary
             borderWidth = 1.px
             transition("all",Time("200ms"), Timing.easeInOut)

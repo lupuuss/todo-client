@@ -4,13 +4,12 @@ import com.github.lupuuss.todo.api.core.task.Task
 import com.github.lupuuss.todo.client.core.TodoKodein
 import com.github.lupuuss.todo.client.core.repository.MyTaskRepository
 import com.github.lupuuss.todo.client.core.repository.TaskListener
+import com.github.lupuuss.todo.client.js.react.mytasks.newtask.newTask
 import kotlinx.coroutines.*
 import org.kodein.di.instance
 import react.RBuilder
 import react.RComponent
 import react.ReactElement
-import react.dom.li
-import react.dom.ul
 import styled.css
 import styled.styledDiv
 
@@ -19,8 +18,6 @@ class MyTasks : RComponent<dynamic, dynamic>(), CoroutineScope by MainScope(), T
     private val repository: MyTaskRepository by TodoKodein.di.instance()
 
     private val tasks = mutableListOf<Task>()
-
-    private val statusList = listOf(Task.Status.NOT_STARTED, Task.Status.IN_PROGRESS, Task.Status.DONE)
 
     override fun componentDidMount() {
 
@@ -62,37 +59,16 @@ class MyTasks : RComponent<dynamic, dynamic>(), CoroutineScope by MainScope(), T
         styledDiv {
             css { +MyTasksStyles.container }
 
+            newTask()
+
             tasks.map {
                 taskItem {
                     key = it.id
                     task = it
-                    onClickDelete = this@MyTasks::onClickDeleteTask
-                    onClickEdit = this@MyTasks::onClickEditTask
-                    onClickStatus = this@MyTasks::onClickStatusTask
                 }
             }
 
         }
-    }
-
-    private fun onClickStatusTask(id: String, status: Task.Status) {
-        launch {
-
-            try {
-                repository.changeTaskStatus(id, status.next())
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-        }
-    }
-
-    private fun onClickEditTask(id: String) {
-        TODO("Not yet implemented")
-    }
-
-    private fun onClickDeleteTask(id: String) {
-        TODO("Not yet implemented")
     }
 }
 

@@ -2,6 +2,7 @@ package com.github.lupuuss.todo.client.core.repository
 
 import com.github.lupuuss.todo.api.core.live.ItemChange
 import com.github.lupuuss.todo.api.core.live.Operation.*
+import com.github.lupuuss.todo.api.core.task.NewTask
 import com.github.lupuuss.todo.api.core.task.PatchTask
 import com.github.lupuuss.todo.api.core.task.Task
 import com.github.lupuuss.todo.api.core.user.User
@@ -175,6 +176,15 @@ class MyTaskRepository(
 
         callListeners {
             onTasksAppend(insertedList)
+        }
+    }
+
+    suspend fun addNewTask(newTask: NewTask) = withContext(coroutineContext) {
+
+        try {
+            taskApi.addNewTask(newTask)
+        } catch (e: Throwable) {
+            throw OperationFailed(e)
         }
     }
 

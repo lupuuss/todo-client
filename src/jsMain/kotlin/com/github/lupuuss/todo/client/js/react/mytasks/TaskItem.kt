@@ -1,8 +1,14 @@
 package com.github.lupuuss.todo.client.js.react.mytasks
 
 import com.github.lupuuss.todo.api.core.task.Task
+import com.github.lupuuss.todo.client.core.TodoKodein
+import com.github.lupuuss.todo.client.core.repository.MyTaskRepository
 import com.github.lupuuss.todo.client.js.react.common.iconButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlinx.css.rem
+import org.kodein.di.instance
 import org.w3c.dom.events.Event
 import react.RBuilder
 import react.RComponent
@@ -13,12 +19,11 @@ import kotlin.js.Date
 
 external interface TaskItemProps : RProps {
     var task: Task
-    var onClickEdit: (String) -> Unit
-    var onClickDelete: (String) -> Unit
-    var onClickStatus: (String, Task.Status) -> Unit
 }
 
-class TaskItem : RComponent<TaskItemProps, dynamic>() {
+class TaskItem : RComponent<TaskItemProps, dynamic>(), CoroutineScope by MainScope() {
+
+    private val repository: MyTaskRepository by TodoKodein.di.instance()
 
     override fun RBuilder.render() {
         styledDiv {
@@ -78,16 +83,22 @@ class TaskItem : RComponent<TaskItemProps, dynamic>() {
     }
 
     private fun onClickStatus(event: Event) {
-        props.onClickStatus(props.task.id, props.task.status)
+        launch {
+            try {
+                repository.changeTaskStatus(props.task.id, props.task.status.next())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     private fun onClickEdit(event: Event) {
-        props.onClickEdit(props.task.id)
+
     }
 
 
     private fun onClickDelete(event: Event) {
-        props.onClickDelete(props.task.id)
+
     }
 
 
