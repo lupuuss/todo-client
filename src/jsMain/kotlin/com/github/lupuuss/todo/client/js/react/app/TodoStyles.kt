@@ -11,7 +11,7 @@ object TodoStyles : NamedStylesheet() {
         flexDirection = FlexDirection.column
         alignItems = Align.center
         width = LinearDimension.auto
-        height = 100.pct
+        minHeight = 100.pct
         backgroundColor = Colors.secondary
     }
 }

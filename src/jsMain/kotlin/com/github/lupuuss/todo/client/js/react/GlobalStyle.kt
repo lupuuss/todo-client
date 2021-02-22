@@ -21,11 +21,7 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
         rule("#root") {
             display = Display.flex
             flexDirection = FlexDirection.column
-            height = 100.pct
-        }
-
-        html {
-            height = 100.pct
+            minHeight = 100.pct
         }
 
         rule("html, body, div") {
@@ -35,7 +31,7 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
         }
 
         body {
-            height = 100.pct
+            backgroundColor = Colors.secondary
         }
 
         a {
