@@ -13,6 +13,7 @@ object MyTasksStyles : NamedStylesheet() {
         width = 700.px
 
         marginTop = 2.rem
+        marginBottom = 2.rem
 
         child(":not(:first-child)") {
             marginTop = 2.rem
