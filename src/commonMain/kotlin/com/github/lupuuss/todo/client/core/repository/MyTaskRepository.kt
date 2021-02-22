@@ -2,12 +2,15 @@ package com.github.lupuuss.todo.client.core.repository
 
 import com.github.lupuuss.todo.api.core.live.ItemChange
 import com.github.lupuuss.todo.api.core.live.Operation.*
+import com.github.lupuuss.todo.api.core.task.PatchTask
 import com.github.lupuuss.todo.api.core.task.Task
 import com.github.lupuuss.todo.api.core.user.User
 import com.github.lupuuss.todo.client.core.api.live.LiveApi
 import com.github.lupuuss.todo.client.core.api.me.MyTasksApi
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
+
+class OperationFailed(cause: Throwable): Exception(cause)
 
 interface TaskListener : CoroutineScope {
 
@@ -120,6 +123,19 @@ class MyTaskRepository(
         }
 
         currentJob = startLoadMore()
+    }
+
+    suspend fun changeTaskStatus(id: String, status: Task.Status) = withContext(coroutineContext) {
+
+        val patch = PatchTask()
+
+        patch.status = status
+
+        try {
+            taskApi.patchTask(id, patch)
+        } catch (e: Throwable) {
+            throw OperationFailed(e)
+        }
     }
 
     private fun startLoadMore() = launch {

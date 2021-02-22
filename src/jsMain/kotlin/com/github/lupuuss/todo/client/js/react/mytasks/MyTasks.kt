@@ -20,6 +20,8 @@ class MyTasks : RComponent<dynamic, dynamic>(), CoroutineScope by MainScope(), T
 
     private val tasks = mutableListOf<Task>()
 
+    private val statusList = listOf(Task.Status.NOT_STARTED, Task.Status.IN_PROGRESS, Task.Status.DONE)
+
     override fun componentDidMount() {
 
         repository.addTasksListener(this@MyTasks)
@@ -74,7 +76,15 @@ class MyTasks : RComponent<dynamic, dynamic>(), CoroutineScope by MainScope(), T
     }
 
     private fun onClickStatusTask(id: String, status: Task.Status) {
-        TODO("Not yet implemented")
+        launch {
+
+            try {
+                repository.changeTaskStatus(id, status.next())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+        }
     }
 
     private fun onClickEditTask(id: String) {

@@ -44,7 +44,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("com.github.lupuuss.todo:core:1.0.2")
+                implementation("com.github.lupuuss.todo:core:1.0.4")
 
                 implementation("org.kodein.di:kodein-di:$vKodein")
 
@@ -74,7 +74,7 @@ kotlin {
         val jsMain by getting {
             dependencies {
 
-                implementation("com.github.lupuuss.todo:core-js:1.0.2")
+                implementation("com.github.lupuuss.todo:core-js:1.0.4")
 
                 implementation("org.jetbrains:kotlin-react:16.13.1-pre.113-kotlin-1.4.0")
                 implementation("org.jetbrains:kotlin-react-dom:16.13.1-pre.113-kotlin-1.4.0")

@@ -1,9 +1,11 @@
 package com.github.lupuuss.todo.client.core.api.me
 
 import com.github.lupuuss.todo.api.core.Page
+import com.github.lupuuss.todo.api.core.task.PatchTask
 import com.github.lupuuss.todo.api.core.task.Task
 import com.github.lupuuss.todo.client.core.api.KtorClientBase
 import io.ktor.client.*
+import io.ktor.client.statement.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -31,5 +33,9 @@ class KtorMyTasksApi(baseUrl: String, client: HttpClient) : KtorClientBase(baseU
         val tmp = "{ \"page\": $json }"
 
         return Json.decodeFromString<PageWrapper>(tmp).page
+    }
+
+    override suspend fun patchTask(id: String, patchTask: PatchTask) {
+        patchJson<HttpResponse>("/me/task/$id", patchTask.asJsonMap())
     }
 }

@@ -52,6 +52,14 @@ open class KtorClientBase(protected val baseUrl: String, protected val client: H
         }
     }
 
+    protected suspend inline fun <reified T> patchJson(path: String, body: Any): T {
+        return client.patch(getUrl(path)) {
+
+            contentType(ContentType.parse("application/json"))
+            this.body = body
+        }
+    }
+
     protected suspend inline fun <reified T> post(
         path: String,
         parameters: Map<String, Any?>? = null,
