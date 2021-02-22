@@ -6,6 +6,7 @@ import com.github.lupuuss.todo.client.core.api.auth.AuthApi
 import com.github.lupuuss.todo.client.core.storage.Storage
 import io.ktor.client.features.*
 import io.ktor.http.*
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
@@ -45,6 +46,8 @@ class AuthManager(
 
             listeners.forEach { it.onAuthChanged(currentUser) }
 
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Throwable) {
             setToken(null)
             throw AuthFailedException(e)
@@ -53,16 +56,8 @@ class AuthManager(
 
     suspend fun currentUser(): User {
         return withContext(coroutineContext) {
-            currentUser ?: try {
-
-                val user = fetchCurrentUser()
-
-                currentUser = user
-
-                return@withContext user
-
-            } catch (e: Throwable) {
-                throw CurrentUserObjectException(e)
+            currentUser ?: fetchCurrentUser().also {
+                currentUser = it
             }
         }
     }
@@ -75,10 +70,10 @@ class AuthManager(
 
             setToken(newToken)
 
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Throwable) {
-
             throw RefreshFailedException(e)
-
         }
 
     }
@@ -89,6 +84,8 @@ class AuthManager(
 
             return authApi.me(token ?: throw UnauthorizedException("User is not logged in!"))
 
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: ClientRequestException) {
 
             if (!retry && e.response.status == HttpStatusCode.Unauthorized) {

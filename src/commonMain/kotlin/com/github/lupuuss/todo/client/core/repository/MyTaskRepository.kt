@@ -134,6 +134,8 @@ class MyTaskRepository(
 
         try {
             taskApi.patchTask(id, patch)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Throwable) {
             throw OperationFailed(e)
         }
@@ -183,6 +185,8 @@ class MyTaskRepository(
 
         try {
             taskApi.addNewTask(newTask)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Throwable) {
             throw OperationFailed(e)
         }

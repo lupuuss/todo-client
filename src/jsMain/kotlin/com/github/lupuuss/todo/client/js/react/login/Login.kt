@@ -1,6 +1,7 @@
 package com.github.lupuuss.todo.client.js.react.login
 
 import com.github.lupuuss.todo.client.core.TodoKodein
+import com.github.lupuuss.todo.client.core.auth.AuthFailedException
 import com.github.lupuuss.todo.client.core.auth.AuthManager
 import com.github.lupuuss.todo.client.js.react.common.iconInput
 import com.github.lupuuss.todo.client.js.react.common.loadingButton
@@ -56,7 +57,7 @@ class Login : RComponent<dynamic, LoginState>(), CoroutineScope by MainScope() {
 
                 authManager.login(state.login, state.password)
 
-            } catch (e: Exception) {
+            } catch (e: AuthFailedException) {
 
                 e.printStackTrace()
 

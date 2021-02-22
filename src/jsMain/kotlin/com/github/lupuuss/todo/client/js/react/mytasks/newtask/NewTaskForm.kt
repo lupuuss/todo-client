@@ -2,7 +2,9 @@ package com.github.lupuuss.todo.client.js.react.mytasks.newtask
 
 import com.github.lupuuss.todo.api.core.task.NewTask
 import com.github.lupuuss.todo.client.core.TodoKodein
+import com.github.lupuuss.todo.client.core.auth.CurrentUserObjectException
 import com.github.lupuuss.todo.client.core.repository.MyTaskRepository
+import com.github.lupuuss.todo.client.core.repository.OperationFailed
 import com.github.lupuuss.todo.client.js.react.common.loadingButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -121,7 +123,7 @@ class NewTaskForm : RComponent<NewTaskFormProps, NewTaskFormState>(), CoroutineS
                 val newTask = NewTask(state.name, state.description)
                 repository.addNewTask(newTask)
                 true
-            } catch (e: Exception) {
+            } catch (e: CurrentUserObjectException) {
                 e.printStackTrace()
                 false
             }

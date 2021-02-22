@@ -3,6 +3,7 @@ package com.github.lupuuss.todo.client.js.react.mytasks
 import com.github.lupuuss.todo.api.core.task.Task
 import com.github.lupuuss.todo.client.core.TodoKodein
 import com.github.lupuuss.todo.client.core.repository.MyTaskRepository
+import com.github.lupuuss.todo.client.core.repository.OperationFailed
 import com.github.lupuuss.todo.client.js.react.common.iconButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -86,7 +87,7 @@ class TaskItem : RComponent<TaskItemProps, dynamic>(), CoroutineScope by MainSco
         launch {
             try {
                 repository.changeTaskStatus(props.task.id, props.task.status.next())
-            } catch (e: Exception) {
+            } catch (e: OperationFailed) {
                 e.printStackTrace()
             }
         }
