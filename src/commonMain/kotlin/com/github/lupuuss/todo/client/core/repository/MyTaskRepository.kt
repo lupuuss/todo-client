@@ -192,4 +192,24 @@ class MyTaskRepository(
         }
     }
 
+    suspend fun deleteTask(id: String) {
+        try {
+            taskApi.deleteTask(id)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            throw OperationFailed(e)
+        }
+    }
+
+    suspend fun changeTask(id: String, patch: PatchTask) {
+        try {
+            taskApi.patchTask(id, patch)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            throw OperationFailed(e)
+        }
+    }
+
 }

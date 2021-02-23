@@ -5,7 +5,9 @@ import com.github.lupuuss.todo.client.core.TodoKodein
 import com.github.lupuuss.todo.client.core.auth.CurrentUserObjectException
 import com.github.lupuuss.todo.client.core.repository.MyTaskRepository
 import com.github.lupuuss.todo.client.core.repository.OperationFailed
+import com.github.lupuuss.todo.client.js.react.common.EditableTextProps
 import com.github.lupuuss.todo.client.js.react.common.loadingButton
+import kotlinx.browser.document
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -17,7 +19,9 @@ import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onSubmitFunction
 import org.kodein.di.instance
 import org.w3c.dom.events.Event
+import org.w3c.dom.get
 import react.*
+import react.dom.value
 import styled.*
 import styled.styledDiv
 
@@ -41,6 +45,16 @@ class NewTaskForm : RComponent<NewTaskFormProps, NewTaskFormState>(), CoroutineS
         state.description = ""
     }
 
+    override fun componentDidUpdate(prevProps: NewTaskFormProps, prevState: NewTaskFormState, snapshot: Any) {
+        val areas = document.getElementsByTagName("textarea")
+
+        for (i in 0 until areas.length) {
+            val textArea = areas[i].asDynamic()
+            textArea.style.height = "auto"
+            textArea.style.height = textArea.scrollHeight + "px"
+        }
+    }
+
     override fun RBuilder.render() {
         styledForm {
             css { +NewTaskFormStyles.container }
@@ -58,7 +72,7 @@ class NewTaskForm : RComponent<NewTaskFormProps, NewTaskFormState>(), CoroutineS
                 }
             }
 
-            styledInput {
+            styledTextArea {
                 css { +NewTaskFormStyles.input }
                 attrs {
                     value = state.description

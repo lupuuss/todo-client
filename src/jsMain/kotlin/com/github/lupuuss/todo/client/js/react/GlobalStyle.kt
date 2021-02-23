@@ -38,7 +38,7 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
             textDecoration = TextDecoration.none
         }
 
-        rule("button, input") {
+        rule("button, input, textarea") {
             boxShadow(color = rgba(0,0,0,0.12), offsetX = 0.px, offsetY = 3.px, blurRadius = 5.px)
             boxShadow(color =  rgba(0,0,0,0.24), offsetX = 0.px, offsetY = 3.px, blurRadius = 4.px)
         }
@@ -50,7 +50,7 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
             }
         }
 
-        rule("button, input") {
+        rule("button, input, textarea") {
             outline = Outline.none
             borderRadius = 3.rem
             borderColor = Color.transparent
@@ -58,7 +58,7 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
             fontSize = 2.rem
         }
 
-        rule("p, input, button") {
+        rule("p, input, button, textarea") {
             animation(duration = Time("200ms"), timing = Timing.easeInOut) {
                 from {
                     opacity = 0
@@ -70,7 +70,7 @@ class GlobalStyle : RComponent<dynamic, dynamic>() {
             }
         }
 
-        input {
+        rule("input, textarea") {
 
             padding(1.rem)
             color = Colors.primary

@@ -6,6 +6,24 @@ import kotlinx.css.*
 
 object TaskItemStyles : NamedStylesheet() {
 
+
+    val container by css {
+        fontSize = 2.rem
+        backgroundColor = Colors.primary
+        borderRadius = 2.rem
+        width = LinearDimension.fillAvailable
+        display = Display.flex
+        flexDirection = FlexDirection.row
+        alignItems = Align.center
+        justifyContent = JustifyContent.spaceEvenly
+        padding(2.rem)
+
+        child(":not(:first-child)") {
+            marginLeft = 2.rem
+        }
+    }
+
+
     val actions by css {
         display = Display.flex
         flexDirection = FlexDirection.column
@@ -17,34 +35,28 @@ object TaskItemStyles : NamedStylesheet() {
     val content by css {
         display = Display.flex
         flexDirection = FlexDirection.column
-        width = 100.pct
-    }
-    val nameLine by css {
-        display = Display.flex
-        flexDirection = FlexDirection.row
-        justifyContent = JustifyContent.spaceBetween
+        flexShrink = 1.0
+        flexGrow = 1.0
+        flexWrap = FlexWrap.wrap
+        minWidth = 0.px
 
         child(":not(:first-child)") {
             marginTop = 1.rem
         }
     }
 
-    val container by css {
+    val editableText by css {
         fontSize = 2.rem
-        backgroundColor = Colors.primary
-        borderRadius = 2.rem
-        width = 100.pct
-        display = Display.flex
-        flexDirection = FlexDirection.row
-        alignItems = Align.center
-        padding(2.rem)
-
-        child(":not(:first-child)") {
-            marginLeft = 2.rem
-        }
+        padding(1.rem)
+        width = LinearDimension.fillAvailable
+        wordWrap = WordWrap.breakWord
+        resize = Resize.none
+        overflow = Overflow.hidden
     }
 
-    val font by css {
-        fontSize = 2.rem
+    val date by css {
+        fontSize = 1.5.rem
+        display = Display.inlineBlock
+        whiteSpace = WhiteSpace.nowrap
     }
 }

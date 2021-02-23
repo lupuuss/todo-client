@@ -43,4 +43,8 @@ class KtorMyTasksApi(baseUrl: String, client: HttpClient) : KtorClientBase(baseU
     override suspend fun addNewTask(newTask: NewTask) {
         postJson<HttpResponse>("/me/task", newTask)
     }
+
+    override suspend fun deleteTask(id: String) {
+        delete<HttpResponse>("/me/task/$id")
+    }
 }

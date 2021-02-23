@@ -7,6 +7,8 @@ object NewTaskFormStyles : NamedStylesheet() {
 
     val input by css {
         padding(2.rem)
+        resize = Resize.none
+        overflow = Overflow.hidden
     }
 
     val container by css {

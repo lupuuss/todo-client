@@ -13,4 +13,6 @@ interface MyTasksApi {
     suspend fun patchTask(id: String, patchTask: PatchTask)
 
     suspend fun addNewTask(newTask: NewTask)
+
+    suspend fun deleteTask(id: String)
 }

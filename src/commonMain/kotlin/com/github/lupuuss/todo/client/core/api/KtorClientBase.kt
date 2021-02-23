@@ -73,4 +73,18 @@ open class KtorClientBase(protected val baseUrl: String, protected val client: H
             client.post(url.applyParameters(parameters), block = block)
         }
     }
+
+    protected suspend inline fun <reified T> delete(
+        path: String,
+        parameters: Map<String, Any?>? = null,
+        noinline block: (HttpRequestBuilder.() -> Unit)? = null
+    ): T {
+
+        val url = getUrl(path)
+        return if (block == null){
+            client.delete(url.applyParameters(parameters))
+        } else {
+            client.delete(url.applyParameters(parameters), block = block)
+        }
+    }
 }
