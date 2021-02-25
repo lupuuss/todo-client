@@ -5,8 +5,11 @@ import com.github.lupuuss.todo.client.core.TodoKodein
 import com.github.lupuuss.todo.client.core.repository.MyTaskRepository
 import com.github.lupuuss.todo.client.core.repository.TaskListener
 import com.github.lupuuss.todo.client.js.react.mytasks.newtask.newTask
+import kotlinx.browser.document
+import kotlinx.browser.window
 import kotlinx.coroutines.*
 import org.kodein.di.instance
+import org.w3c.dom.events.Event
 import react.*
 import styled.css
 import styled.styledDiv
@@ -26,7 +29,15 @@ class MyTasks : RComponent<dynamic, MyTasksState>(), CoroutineScope by MainScope
     override fun componentDidMount() {
 
         repository.addTasksListener(this@MyTasks)
-        repository.loadMore()
+        window.onscroll = this::onScroll
+
+        repository.requireInitialLoad()
+    }
+
+    private fun onScroll(event: Event) {
+        if (window.scrollY > (document.body!!.offsetHeight - window.outerHeight)) {
+            repository.loadMore()
+        }
     }
 
     override fun componentWillUnmount() {

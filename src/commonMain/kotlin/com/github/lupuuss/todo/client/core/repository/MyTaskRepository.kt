@@ -31,10 +31,12 @@ class MyTaskRepository(
 
     private var tasks = LinkedHashMap<String, Task>()
 
-    private val pageSize = 10
+    private val pageSize = 5
     private var currentPage = 0
 
     private var currentJob: Job? = null
+
+    private var noMore = false
 
     fun init() {
         liveApi.addOnChangeListener(this)
@@ -119,7 +121,8 @@ class MyTaskRepository(
     }
 
     fun loadMore() {
-        if (currentJob != null) {
+
+        if (currentJob?.isCompleted == false || noMore) {
             return
         }
 
@@ -168,6 +171,8 @@ class MyTaskRepository(
                 currentPage = it
             }
 
+            noMore = page.nextPage == null
+
         } while(page.nextPage != null && inserted < pageSize)
 
     }
@@ -209,6 +214,12 @@ class MyTaskRepository(
             throw e
         } catch (e: Throwable) {
             throw OperationFailed(e)
+        }
+    }
+
+    fun requireInitialLoad() {
+        if (tasks.size < pageSize) {
+            loadMore()
         }
     }
 
