@@ -68,13 +68,16 @@ class TaskItem(props: TaskItemProps): RComponent<TaskItemProps, TaskItemState>()
                     css = TaskItemStyles.editableText
                 }
 
-                editableText {
-                    isEditable = state.isEditable
-                    value = state.newDescription ?: ""
-                    placeholder = "Description..."
-                    onChange = this@TaskItem::onDescriptionChanged
-                    textArea = true
-                    css = TaskItemStyles.editableText
+                if (state.isEditable || !state.newDescription.isNullOrBlank()) {
+
+                    editableText {
+                        isEditable = state.isEditable
+                        value = state.newDescription ?: ""
+                        placeholder = "Description..."
+                        onChange = this@TaskItem::onDescriptionChanged
+                        textArea = true
+                        css = TaskItemStyles.editableText
+                    }
                 }
             }
 
