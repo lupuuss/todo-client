@@ -7,17 +7,21 @@ import com.github.lupuuss.todo.client.core.repository.TaskListener
 import com.github.lupuuss.todo.client.js.react.mytasks.newtask.newTask
 import kotlinx.coroutines.*
 import org.kodein.di.instance
-import react.RBuilder
-import react.RComponent
-import react.ReactElement
+import react.*
 import styled.css
 import styled.styledDiv
 
-class MyTasks : RComponent<dynamic, dynamic>(), CoroutineScope by MainScope(), TaskListener {
+external interface MyTasksState : RState {
+    var tasks: MutableList<Task>
+}
+
+class MyTasks : RComponent<dynamic, MyTasksState>(), CoroutineScope by MainScope(), TaskListener {
 
     private val repository: MyTaskRepository by TodoKodein.di.instance()
 
-    private val tasks = mutableListOf<Task>()
+    init {
+        state.tasks = mutableListOf()
+    }
 
     override fun componentDidMount() {
 
@@ -31,27 +35,30 @@ class MyTasks : RComponent<dynamic, dynamic>(), CoroutineScope by MainScope(), T
     }
 
     override fun onTasksAppend(tasks: List<Task>) {
-        this.tasks.addAll(tasks)
-        forceUpdate()
+        setState {
+            this.tasks.addAll(tasks)
+        }
     }
 
     override fun onNewTask(task: Task) {
-        this.tasks.add(0, task)
-        forceUpdate()
+        setState {
+            this.tasks.add(0, task)
+        }
     }
 
     override fun onTaskChanged(task: Task) {
 
-        val index = tasks.indexOfFirst { it.id == task.id }
+        val index = state.tasks.indexOfFirst { it.id == task.id }
 
-        tasks[index] = task
-
-        forceUpdate()
+        setState {
+            tasks[index] = task
+        }
     }
 
     override fun onTasksRemoved(ids: List<String>) {
-        this.tasks.removeAll { ids.contains(it.id) }
-        forceUpdate()
+        setState {
+            this.tasks.removeAll { ids.contains(it.id) }
+        }
     }
 
     override fun RBuilder.render() {
@@ -61,7 +68,7 @@ class MyTasks : RComponent<dynamic, dynamic>(), CoroutineScope by MainScope(), T
 
             newTask()
 
-            tasks.map {
+            state.tasks.map {
                 taskItem {
                     key = it.id
                     task = it
