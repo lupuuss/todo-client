@@ -127,8 +127,8 @@ class AuthRequiredException : Exception("User must login with credentials!")
 
 class RefreshFailedException(cause: Throwable) : Exception(cause)
 
-class AuthFailedException(cause: Throwable) : Exception(cause = cause)
+class AuthFailedException(cause: Throwable) : Exception(cause)
 
-class CurrentUserObjectException(cause: Throwable) : Exception(cause = cause)
+class CurrentUserObjectException(cause: Throwable) : Exception(cause)
 
 class UnauthorizedException(msg: String): Exception(msg)

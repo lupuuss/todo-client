@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform") version "1.4.30"
@@ -20,6 +21,7 @@ repositories {
 }
 
 val vKtor = "1.5.1"
+val vCoroutines = "1.4.2"
 val vKodein = "7.3.0"
 
 kotlin {
@@ -51,7 +53,7 @@ kotlin {
                 implementation("io.ktor:ktor-client-core:$vKtor")
                 implementation("io.ktor:ktor-client-websockets:$vKtor")
                 implementation("io.ktor:ktor-client-serialization:$vKtor")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$vCoroutines")
             }
         }
         val commonTest by getting {
@@ -62,7 +64,13 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
+                implementation("com.github.lupuuss.todo:core-jvm:1.0.4")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$vCoroutines")
+
                 implementation("com.google.android.material:material:1.3.0")
+
+                implementation("io.ktor:ktor-client-okhttp:$vKtor")
             }
         }
         val androidTest by getting {
@@ -91,15 +99,32 @@ kotlin {
 }
 
 android {
+
+    packagingOptions {
+        exclude("META-INF/core.kotlin_module")
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
     compileSdkVersion(30)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        applicationId = "com.github.lupuuss.todo.mainModule"
+        applicationId = "com.github.lupuuss.todo.client.android"
         minSdkVersion(24)
         targetSdkVersion(30)
     }
+
 }
 
 tasks.getByName<KotlinWebpack>("jsBrowserProductionWebpack") {
     outputFileName = "output.js"
+}
+
+tasks.withType(KotlinCompile::class) {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
