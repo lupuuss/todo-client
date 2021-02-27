@@ -45,10 +45,20 @@ object TaskItemStyles : NamedStylesheet() {
         }
     }
 
-    val editableText by css {
+    private val editableText by css {
         fontSize = 2.rem
         padding(1.rem)
         width = LinearDimension.fillAvailable
+    }
+
+    val nameText by css {
+        +editableText
+        whiteSpace = WhiteSpace.preWrap
+        fontWeight = FontWeight.bold
+    }
+
+    val descriptionText by css {
+        +editableText
         wordWrap = WordWrap.breakWord
         resize = Resize.none
         overflow = Overflow.hidden
