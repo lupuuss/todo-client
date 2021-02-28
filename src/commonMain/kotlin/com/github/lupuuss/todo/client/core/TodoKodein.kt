@@ -21,8 +21,8 @@ object TodoKodein {
     lateinit var di: DI
     private set
 
-    private const val baseUrl = "http://localhost:9090"
-    private const val baseUrlWs = "ws://localhost:9090"
+    private const val baseUrl = "http://todo-api-rest-ktor.herokuapp.com"
+    private const val baseUrlWs = "ws://todo-api-rest-ktor.herokuapp.com"
 
     fun init(platformSpecific: DI.MainBuilder.() -> Unit) {
 
