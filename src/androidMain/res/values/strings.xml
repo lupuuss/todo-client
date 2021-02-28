@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TO-DO</string>
+    <string name="login">Login</string>
+    <string name="login_hint">Login…</string>
+    <string name="password_hint">Password…</string>
 </resources>

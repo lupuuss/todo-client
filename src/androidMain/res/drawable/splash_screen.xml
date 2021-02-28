@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <color android:color="@color/secondary" />
+        <color android:color="?colorSurface" />
     </item>
     <item android:width="100dp"
           android:height="100dp"
           android:gravity="center">
         <shape android:shape="oval" android:innerRadius="12dp">
-            <solid android:color="@color/primary"/>
+            <solid android:color="?android:colorBackground"/>
         </shape>
     </item>
     <item  android:width="100dp"
