@@ -22,6 +22,7 @@ repositories {
 
 val vKtor = "1.5.1"
 val vCoroutines = "1.4.2"
+val vLifecycle = "2.3.0"
 val vKodein = "7.3.0"
 
 kotlin {
@@ -64,11 +65,17 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
+
+                implementation("org.kodein.di:kodein-di-framework-android-x:$vKodein")
+                implementation("org.kodein.di:kodein-di-jvm:$vKodein")
+
                 implementation("com.github.lupuuss.todo:core-jvm:1.0.4")
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$vCoroutines")
 
                 implementation("com.google.android.material:material:1.3.0")
+                implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$vLifecycle")
+                implementation("androidx.lifecycle:lifecycle-livedata-ktx:$vLifecycle")
 
                 implementation("io.ktor:ktor-client-okhttp:$vKtor")
             }
@@ -107,6 +114,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        dataBinding = true
     }
 
     compileSdkVersion(30)
