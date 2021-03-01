@@ -30,7 +30,13 @@ class LoginActivity : BaseActivity() {
         viewModel.loginResult.observe(this, this::onLoginResult)
         viewModel.passwordError.observe(this, this::onPasswordError)
         viewModel.loginError.observe(this, this::onLoginError)
+        viewModel.isLoading.observe(this, this::onLoading)
+    }
 
+    private fun onLoading(isLoading: Boolean?) {
+        if (isLoading == true) {
+            hideSoftKeyboard()
+        }
     }
 
     private fun onLoginError(loginError: LoginError?) {
