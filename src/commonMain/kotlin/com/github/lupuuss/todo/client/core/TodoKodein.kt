@@ -16,19 +16,34 @@ import io.ktor.client.features.websocket.*
 import org.kodein.di.*
 
 
+class TodoKodeinConfig {
+    var preFunction: DI.MainBuilder.() -> Unit = {}
+    var postFunction: DI.MainBuilder.() -> Unit = {}
+
+    fun pre(block: DI.MainBuilder.() -> Unit) {
+        preFunction = block
+    }
+
+    fun post(block: DI.MainBuilder.() -> Unit) {
+        postFunction = block
+    }
+}
+
 object TodoKodein {
 
     lateinit var di: DI
     private set
 
-    private const val baseUrl = "http://todo-api-rest-ktor.herokuapp.com"
-    private const val baseUrlWs = "ws://todo-api-rest-ktor.herokuapp.com"
+    private const val baseUrl = "https://todo-api-rest-ktor.herokuapp.com"
+    private const val baseUrlWs = "wss://todo-api-rest-ktor.herokuapp.com"
 
-    fun init(platformSpecific: DI.MainBuilder.() -> Unit) {
+    fun init(configBlock: TodoKodeinConfig.() -> Unit) {
+
+        val config = TodoKodeinConfig().apply(configBlock)
 
         di = DI {
 
-            platformSpecific()
+            config.preFunction(this)
 
             bind<HttpClient>(tag = "WebSocket") with singleton {
                 HttpClient {
@@ -88,6 +103,8 @@ object TodoKodein {
             }
 
             bind<MyTaskRepository>() with provider { instance<SessionKodein>().myTaskRepository!! }
+
+            config.postFunction(this)
         }
     }
 }

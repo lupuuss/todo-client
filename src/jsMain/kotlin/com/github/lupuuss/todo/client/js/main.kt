@@ -17,8 +17,10 @@ import kotlin.coroutines.CoroutineContext
 fun main() {
 
     TodoKodein.init {
-        bind<Storage>() with singleton { BrowserStorage() }
-        bind<CoroutineContext>(tag = "Networking") with provider { Dispatchers.Default }
+        pre {
+            bind<Storage>() with singleton { BrowserStorage() }
+            bind<CoroutineContext>(tag = "Networking") with provider { Dispatchers.Default }
+        }
     }
 
     window.onload = {
