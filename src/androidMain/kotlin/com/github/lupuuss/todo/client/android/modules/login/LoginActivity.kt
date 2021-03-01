@@ -54,8 +54,11 @@ class LoginActivity : BaseActivity() {
         when (result) {
             true -> startActivity(Intent(this, HomeActivity::class.java))
             false -> {
-                snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.error_auth, Snackbar.LENGTH_INDEFINITE)
-                snackbar!!.show()
+                snackbar = Snackbar
+                    .make(findViewById(android.R.id.content), R.string.error_auth, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok) {
+                        snackbar?.dismiss()
+                    }.also { it.show() }
             }
             null -> {
                 snackbar?.dismiss()
