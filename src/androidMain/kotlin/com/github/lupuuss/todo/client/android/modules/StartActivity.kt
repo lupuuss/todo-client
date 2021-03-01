@@ -7,10 +7,7 @@ import com.github.lupuuss.todo.client.android.R
 import com.github.lupuuss.todo.client.android.modules.home.HomeActivity
 import com.github.lupuuss.todo.client.android.modules.login.LoginActivity
 import com.github.lupuuss.todo.client.core.auth.AuthManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.kodein.di.DIAware
 import org.kodein.di.android.di
 import org.kodein.di.instance
@@ -51,5 +48,10 @@ class StartActivity : AppCompatActivity(), DIAware, CoroutineScope by MainScope(
                 startActivity(Intent(this@StartActivity, LoginActivity::class.java))
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cancel()
     }
 }

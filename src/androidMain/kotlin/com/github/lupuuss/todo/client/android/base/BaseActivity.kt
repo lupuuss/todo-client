@@ -11,7 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 
-abstract class BaseActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         applyTheme()
@@ -20,11 +20,6 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope by MainScope()
 
     private fun applyTheme() {
         setTheme(R.style.Theme_Todo_Dark)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cancel()
     }
 
     fun hideSoftKeyboard() {

@@ -3,6 +3,8 @@ package com.github.lupuuss.todo.client.android.modules.login
 import android.content.Intent
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import com.google.android.material.snackbar.Snackbar
+
 import com.github.lupuuss.todo.client.android.R
 import com.github.lupuuss.todo.client.android.base.BaseActivity
 import com.github.lupuuss.todo.client.android.databinding.ActivityLoginBinding
@@ -10,7 +12,6 @@ import com.github.lupuuss.todo.client.android.modules.errors.LoginError
 import com.github.lupuuss.todo.client.android.modules.errors.PasswordError
 import com.github.lupuuss.todo.client.android.modules.home.HomeActivity
 import com.github.lupuuss.todo.client.android.provideViewModel
-import com.google.android.material.snackbar.Snackbar
 
 class LoginActivity : BaseActivity() {
 
@@ -33,14 +34,15 @@ class LoginActivity : BaseActivity() {
         viewModel.isLoading.observe(this, this::onLoading)
     }
 
-    private fun onLoading(isLoading: Boolean?) {
-        if (isLoading == true) {
+    private fun onLoading(isLoading: Boolean) {
+        if (isLoading) {
             hideSoftKeyboard()
         }
     }
 
     private fun onLoginError(loginError: LoginError?) {
         onLoginResult(null)
+
         binds.login.error = when (loginError) {
             LoginError.EMPTY -> getString(R.string.error_field_empty)
             null -> ""
@@ -49,6 +51,7 @@ class LoginActivity : BaseActivity() {
 
     private fun onPasswordError(passwordError: PasswordError?) {
         onLoginResult(null)
+
         binds.password.error = when (passwordError) {
             PasswordError.EMPTY -> getString(R.string.error_field_empty)
             null -> ""
@@ -66,9 +69,8 @@ class LoginActivity : BaseActivity() {
                         snackbar?.dismiss()
                     }.also { it.show() }
             }
-            null -> {
-                snackbar?.dismiss()
-            }
+            null -> snackbar?.dismiss()
+
         }
     }
 }
