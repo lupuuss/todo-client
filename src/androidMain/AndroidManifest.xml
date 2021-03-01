@@ -16,6 +16,7 @@
 
         <activity
                 android:name=".modules.StartActivity"
+                android:noHistory="true"
                 android:theme="@style/Theme.Todo.Dark.Start">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -24,5 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".modules.login.LoginActivity" />
+
+        <activity android:name=".modules.home.HomeActivity" />
     </application>
 </manifest>

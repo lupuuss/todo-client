@@ -1,63 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <import type="android.view.View" />
         <variable name="viewModel" type="com.github.lupuuss.todo.client.android.modules.login.LoginViewModel"/>
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="20dp">
-
-        <androidx.constraintlayout.helper.widget.Flow
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:orientation="vertical"
-                app:constraint_referenced_ids="login, password, loginButton"
-                app:flow_verticalGap="30dp"
-                app:flow_verticalStyle="packed"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/login"
-                android:layout_width="0dp"
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/login_hint"
-                app:startIconDrawable="@drawable/ic_baseline_person_24">
+                android:layout_gravity="center"
+                android:fitsSystemWindows="true"
+                android:padding="20dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                    android:text="@={viewModel.login}"
-                    android:inputType="textNoSuggestions|textVisiblePassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+            <androidx.constraintlayout.helper.widget.Flow
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    app:constraint_referenced_ids="login, password, loginButtonContainer"
+                    app:flow_verticalGap="30dp"
+                    app:flow_verticalStyle="packed"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/login"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/login_hint"
+                    app:startIconDrawable="@drawable/ic_baseline_person_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:text="@={viewModel.login}"
+                        android:inputType="textNoSuggestions|textVisiblePassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-        <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/password"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/password_hint"
-                app:startIconDrawable="@drawable/ic_baseline_key_24">
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/password"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password_hint"
+                    app:endIconMode="password_toggle"
+                    app:startIconDrawable="@drawable/ic_baseline_key_24">
 
-            <com.google.android.material.textfield.TextInputEditText
-                    android:text="@={viewModel.password}"
-                    android:inputType="textPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                <com.google.android.material.textfield.TextInputEditText
+                        android:text="@={viewModel.password}"
+                        android:inputType="textPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
-                android:id="@+id/loginButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/login"
-                android:onClick="@{() -> viewModel.login()}"/>
+            <FrameLayout
+                    android:id="@+id/loginButtonContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        android:layout_gravity="center"
+                        android:elevation="10dp"
+                        android:visibility="@{viewModel.isLoading() ? View.VISIBLE : View.GONE}"
+                        app:indicatorSize="20dp"
+                        app:indicatorColor="?colorOnPrimary"/>
+                <com.google.android.material.button.MaterialButton
+                        android:id="@+id/loginButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.isLoading ?  @string/empty : @string/login}"
+                        android:clickable="@{!viewModel.isLoading}"
+                        android:onClick="@{() -> viewModel.login()}" />
+            </FrameLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.github.lupuuss.todo.client.android.R
+import com.github.lupuuss.todo.client.android.modules.home.HomeActivity
 import com.github.lupuuss.todo.client.android.modules.login.LoginActivity
 import com.github.lupuuss.todo.client.core.auth.AuthManager
 import kotlinx.coroutines.CoroutineScope
@@ -45,7 +46,7 @@ class StartActivity : AppCompatActivity(), DIAware, CoroutineScope by MainScope(
             delay(maxOf(0.seconds, 1.5.seconds - duration))
 
             if (authManager.isUserLoggedIn()) {
-                // todo
+                startActivity(Intent(this@StartActivity, HomeActivity::class.java))
             } else {
                 startActivity(Intent(this@StartActivity, LoginActivity::class.java))
             }

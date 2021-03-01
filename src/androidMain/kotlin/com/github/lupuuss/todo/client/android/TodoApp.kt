@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.github.lupuuss.todo.client.android.di.DIViewModelFactory
+import com.github.lupuuss.todo.client.android.modules.home.HomeViewModel
 import com.github.lupuuss.todo.client.android.modules.login.LoginViewModel
 import com.github.lupuuss.todo.client.core.TodoKodein
 import com.github.lupuuss.todo.client.core.storage.SharedPrefsStorage
@@ -23,14 +24,11 @@ class TodoApp : Application(), DIAware {
         super.onCreate()
 
         TodoKodein.init {
-            pre {
-                bind<Storage>() with singleton { SharedPrefsStorage(applicationContext) }
-                bind<CoroutineContext>(tag = "Networking") with provider { Dispatchers.IO }
-            }
+            bind<Storage>() with singleton { SharedPrefsStorage(applicationContext) }
+            bind<CoroutineContext>(tag = "Networking") with provider { Dispatchers.IO }
 
-            post {
-                bind<LoginViewModel>() with provider { LoginViewModel(instance()) }
-            }
+            bind<LoginViewModel>() with provider { LoginViewModel(instance()) }
+            bind<HomeViewModel>() with provider { HomeViewModel() }
         }
 
         di = TodoKodein.di
@@ -39,8 +37,8 @@ class TodoApp : Application(), DIAware {
     }
 }
 
-fun <T : ViewModel> FragmentActivity.provideViewModel(cls: Class<T>): T {
+inline fun <reified T : ViewModel> FragmentActivity.provideViewModel(): T {
     val factory = (this.application as TodoApp).viewModelFactory
 
-    return ViewModelProvider(this, factory).get(cls)
+    return ViewModelProvider(this, factory).get(T::class.java)
 }

@@ -4,4 +4,7 @@
     <string name="login">Login</string>
     <string name="login_hint">Login…</string>
     <string name="password_hint">Password…</string>
+    <string name="empty" translatable="false"/>
+    <string name="error_auth">Authentication failed!</string>
+    <string name="error_field_empty">This field cannot be empty!</string>
 </resources>
